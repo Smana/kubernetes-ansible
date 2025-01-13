@@ -1,11 +1,5 @@
 ---
 crictl_checksums:
-  arm:
-    v1.32.0: 0
-    v1.31.1: 0
-    v1.31.0: 0
-    v1.30.1: 0
-    v1.30.0: 0
   arm64:
     v1.32.0: f2f4e20658b72d00897f41e4b57093c8080e2d800ee894a5f4351f31d1833e30
     v1.31.1: cd70f9b2f75c9619f40450d4b6e2c74aaab619917da517eff6787b442f8b0e56
@@ -25,16 +19,6 @@ crictl_checksums:
     v1.30.1: bafdeb709f714619c1f91579d485f46b44f1bbce2dc94227a3db761fbeb58664
     v1.30.0: ada550cecb5647014f16dd3ff6c59d7ef7d942ca8cb6c51c15ed019622f39ee9
 crio_archive_checksums:
-  arm:
-    v1.32.0: 0
-    v1.31.3: 0
-    v1.31.2: 0
-    v1.31.1: 0
-    v1.31.0: 0
-    v1.30.3: 0
-    v1.30.2: 0
-    v1.30.1: 0
-    v1.30.0: 0
   arm64:
     v1.32.0: b092eddabedac98a0f8449dc535acfec0e14c21f59cabe8f9703043d995a1a41
     v1.31.3: 150e828420848d7dc4d190c13b313c7033f9a255a6e656e32b98f27ac574daa0
@@ -68,20 +52,6 @@ crio_archive_checksums:
 # Checksum
 # Kubernetes versions above Kubespray's current target version are untested and should be used with caution.
 kubelet_checksums:
-  arm:
-    v1.32.0: 0
-    v1.31.4: 0
-    v1.31.3: 0
-    v1.31.2: 0
-    v1.31.1: 0
-    v1.31.0: 0
-    v1.30.6: 0
-    v1.30.5: 0
-    v1.30.4: 0
-    v1.30.3: 0
-    v1.30.2: 0
-    v1.30.1: 0
-    v1.30.0: 0
   arm64:
     v1.32.0: bda9b2324c96693b38c41ecea051bab4c7c434be5683050b5e19025b50dbc0bf
     v1.31.4: fb6f02f3324a72307acc11998eb5b1c3778167ae165c98f9d49bd011498e72f8
@@ -196,20 +166,6 @@ kubectl_checksums:
     v1.30.1: ef01ae21e91600469db3df01172144fac6c61083e7d3282bef72ce732d76d0d8
     v1.30.0: f8a9eac6e12bc8ab7debe6c197d6536f5b3a9f199e8837afd8e4405291351811
 kubeadm_checksums:
-  arm:
-    v1.32.0: 0
-    v1.31.4: 0
-    v1.31.3: 0
-    v1.31.2: 0
-    v1.31.1: 0
-    v1.31.0: 0
-    v1.30.6: 0
-    v1.30.5: 0
-    v1.30.4: 0
-    v1.30.3: 0
-    v1.30.2: 0
-    v1.30.1: 0
-    v1.30.0: 0
   arm64:
     v1.32.0: 5da9746a449a3b8a8312b6dd8c48dcb861036cf394306cfbc66a298ba1e8fbde
     v1.31.4: 4598c2f0c69e60feb47a070376da358f16efe0e1403c6aca97fa8f7ab1d0e7c0
@@ -259,18 +215,6 @@ kubeadm_checksums:
     v1.30.1: dc529fae8227422a23a8d4f70e28161fa207a4da7cb24d340aae0592dd729ea5
     v1.30.0: a77badcaff292862df8324e17f74ab7ce3c6ea9f390647878f1838a3a832f413
 etcd_binary_checksums:
-  arm:
-    v3.5.16: 0
-    v3.5.15: 0
-    v3.5.14: 0
-    v3.5.13: 0
-    v3.5.12: 0
-    v3.5.11: 0
-    v3.5.10: 0
-    v3.5.9: 0
-    v3.5.8: 0
-    v3.5.7: 0
-    v3.5.6: 0
   arm64:
     v3.5.16: 8e68c55e6d72b791a9e98591c755af36f6f55aa9eca63767822cd8a3817fdb23
     v3.5.15: 5aa28b435edb1f22bf6455f754e16a13e3e4eb1ad8fc7c22ad47aa8e722febf2
@@ -341,18 +285,6 @@ cni_binary_checksums:
     v1.0.1: f078e33067e6daaef3a3a5010d6440f2464b7973dec3ca0b5d5be22fdcb1fd96
     v1.0.0: 1a055924b1b859c54a97dc14894ecaa9b81d6d949530b9544f0af4173f5a8f2a
 calicoctl_binary_checksums:
-  arm:
-    v3.29.1: 0
-    v3.29.0: 0
-    v3.28.2: 0
-    v3.28.1: 0
-    v3.28.0: 0
-    v3.27.5: 0
-    v3.27.4: 0
-    v3.27.3: 0
-    v3.27.2: 0
-    v3.27.1: 0
-    v3.27.0: 0
   arm64:
     v3.29.1: 6f662d316a267854dc5487242ca7ec8ca70c35b52bed258aafb76c2d113643c2
     v3.29.0: ab23afb283fcdffcf0e1156cdced68d05b6c2b70fd4ea2cbc3189d0ecd43bdfd
@@ -363,7 +295,6 @@ calicoctl_binary_checksums:
     v3.27.4: 8544b601a67e0594009dafef6d3237fcf6f32fb64726c09abc1f2ce9d6819496
     v3.27.3: 1fc5f58a18d8b1c487b4663fc5cbe23b45bd9d31617debd309f6dfac7c11a8ef
     v3.27.2: 0fd1f65a511338cf9940835987d420c94ab95b5386288ba9673b736a4d347463
-    v3.27.1: 0
     v3.27.0: b4b8c71f9658165e45336b9b5e4fad865529feeffe4294247eb5b4c4310dcaf9
   amd64:
     v3.29.1: 2ac849181cb1fb40c61c06d075711025cdb909d80562d078cc548d50a0edcd3d
@@ -375,7 +306,6 @@ calicoctl_binary_checksums:
     v3.27.4: 84f2bd29ef7b06e85a2caf0b6c6e0d3da5ab5264d46b360e6baaf49bbc3b957d
     v3.27.3: e22b8bb41684f8ffb5143b50bf3b2ab76985604d774d397cfb6fb11d8a19f326
     v3.27.2: 692f69dc656e41cd35e23e24f56c98c4aeeb723fed129985b46f71e6eb5e1594
-    v3.27.1: 0
     v3.27.0: 46e79ae146b3dd90998f56511cf5d6db64deb97cb784235caf1f99e0672d66e4
   ppc64le:
     v3.29.1: ef6064f2ec1a09b5eb8c43ab0c64bd42785c24f5b22b950583fb5074f472c2b7
@@ -387,20 +317,8 @@ calicoctl_binary_checksums:
     v3.27.4: 1d44e119d9836eb4715f42a915a849377f7d6a6881b73ce66d0c95092e29d4f2
     v3.27.3: 5f2ac510c0ec31ec4c02ff2660f2502b68b655616d5b766a51bd99d2e3604fbc
     v3.27.2: f918bb88de1d01de3d143e1e75d0ee1256f247c5cbabec7d665aaf8d1fd3cc6c
-    v3.27.1: 0
     v3.27.0: 3de46d8bc30c6f9d9387d484ed62a5655c1f204b1b831b5a90f0a0d1c1ffd752
 ciliumcli_binary_checksums:
-  arm:
-    v0.16.0: 0
-    v0.15.23: 0
-    v0.15.22: 0
-    v0.15.21: 0
-    v0.15.20: 0
-    v0.15.19: 0
-    v0.15.18: 0
-    v0.15.17: 0
-    v0.15.16: 0
-    v0.15.15: 0
   arm64:
     v0.16.0: fe16bcd447fc6fe764ca75712f5832d7504845e9f782684ff09c9f52548237fe
     v0.15.23: 9aa37d99a15e72bbcb555d7ed5b88c2ae3a7e6fbc478f9ee402a835ba6b41175
@@ -423,17 +341,6 @@ ciliumcli_binary_checksums:
     v0.15.17: ed8edbce96ac7921ee75b2fbe42409fbe381e2f8f896c10d13f864cc52e07a43
     v0.15.16: f30095e1a0b926d2114b7a419141bea76e950b643182e97e666950ca05a205d9
     v0.15.15: 492279c1f960c79747290a5d1e1b21084a04a93f9e13ab4ae7df4c76fe808aff
-  ppc64le:
-    v0.16.0: 0
-    v0.15.23: 0
-    v0.15.22: 0
-    v0.15.21: 0
-    v0.15.20: 0
-    v0.15.19: 0
-    v0.15.18: 0
-    v0.15.17: 0
-    v0.15.16: 0
-    v0.15.15: 0
 calico_crds_archive_checksums:
   v3.29.1: 17894ed9f7487f1418e599fdeff5db9047374dee12d560114e25ff9147a455c3
   v3.29.0: 403a6b8616c4e97b081d7be27e9024f2f66b2d73a0ea037420a29689205b2064
@@ -512,14 +419,6 @@ helm_archive_checksums:
     v3.14.1: 4d853ab8fe3462287c7272fbadd5f73531ecdd6fa0db37d31630e41ae1ae21de
     v3.14.0: f1f9d3561724863edd4c06d89acb2e2fd8ae0f1b72058ceb891fa1c346ce5dbc
 cri_dockerd_archive_checksums:
-  arm:
-    0.3.11: 0
-    0.3.10: 0
-    0.3.9: 0
-    0.3.8: 0
-    0.3.7: 0
-    0.3.6: 0
-    0.3.5: 0
   arm64:
     0.3.11: 877f635a7005b393f7aab24ca4b1cd7bdfb3b967d055e858408240c86e3cab9a
     0.3.10: 24d2d9cdbb4ed4bda4b0838edb52104ac7a4e2212a0ee05b177de0ae5b6a4a9a
@@ -536,28 +435,7 @@ cri_dockerd_archive_checksums:
     0.3.7: 518c5d5345085f36d311f274208705d7fdb79337a80c256871ce941d5a7d47a1
     0.3.6: cf271d65abee88c0c0a6d9dacb151913bf37d25d45913a7e04b09efe408eae18
     0.3.5: 30d47bd89998526d51a8518f9e8ef10baed408ab273879ee0e30350702092938
-  ppc64le:
-    0.3.11: 0
-    0.3.10: 0
-    0.3.9: 0
-    0.3.8: 0
-    0.3.7: 0
-    0.3.6: 0
-    0.3.5: 0
 runc_checksums:
-  arm:
-    v1.2.3: 0
-    v1.2.2: 0
-    v1.2.1: 0
-    v1.2.0: 0
-    v1.1.15: 0
-    v1.1.14: 0
-    v1.1.13: 0
-    v1.1.12: 0
-    v1.1.11: 0
-    v1.1.10: 0
-    v1.1.9: 0
-    v1.1.8: 0
   arm64:
     v1.2.3: 4ef19ab21ce1ae5a01e1d3fa5b005e45cdf59f5d3ab32541c9e262cb2b2d3451
     v1.2.2: bfd3e6c58bd6060eaa725520c31cbc8f6386ac7606e65bfa7fe9084100aa1789
@@ -598,18 +476,6 @@ runc_checksums:
     v1.1.9: 065cf4f84b5acc0acdb017af2955743dfb5f5e1f49a493eea3e8206f33bf6fe6
     v1.1.8: a816cd654e804249c4f757cc6bf2aa2c128e4b8e6a993067d44c63c891c081ab
 crun_checksums:
-  arm:
-    1.17: 0
-    1.16.1: 0
-    1.16: 0
-    1.15: 0
-    1.14.4: 0
-    1.14.3: 0
-    1.14.2: 0
-    1.14.1: 0
-    1.11.2: 0
-    1.11.1: 0
-    1.9.2: 0
   arm64:
     1.17: 3049017b99208f5ecd15c1366f47a77dace87f42dccf317ad40a07f1a867518c
     1.16.1: 973817340e6da12c90c751b011c797396940cca965cefa74557bd1c0939f4042
@@ -647,22 +513,6 @@ crun_checksums:
     1.11.1: 723528913c24fac8fc7c4418b9780090eba74ac2d82435c673dedc3af39d5abe
     1.9.2: 42813b5bea2137bf9abcd1bcaa098a7d61fbbffd2a35d9c9f0f1ba79fb74eb5b
 youki_checksums:
-  arm:
-    0.4.1: 0
-    0.4.0: 0
-    0.3.2: 0
-    0.3.1: 0
-    0.3.0: 0
-    0.2.0: 0
-    0.1.0: 0
-  arm64:
-    0.4.1: 0
-    0.4.0: 0
-    0.3.2: 0
-    0.3.1: 0
-    0.3.0: 0
-    0.2.0: 0
-    0.1.0: 0
   amd64:
     0.4.1: 6504a43c28710d2cb3dd6535ae9222c0570e954a799a787ccf5e5d611996bf11
     0.4.0: a9fb31c7388ed786a2a1b6361cf4aaa7c3e3b62be4c3d36dc15331416a3d6290
@@ -671,31 +521,7 @@ youki_checksums:
     0.3.0: 741ba3cd85d768bebba02598cedcf3b15a2160e4d6ce33a3d5c4e1b3080f9c1c
     0.2.0: b268689a91db07feebfd41d5806b10c7d051fbcbf7efb15076e2228763ac0762
     0.1.0: f00677e9674215b44f140f0c0f4b79b0001c72c073d2c5bb514b7a9dcb13bdbc
-  ppc64le:
-    0.4.1: 0
-    0.4.0: 0
-    0.3.2: 0
-    0.3.1: 0
-    0.3.0: 0
-    0.2.0: 0
-    0.1.0: 0
 kata_containers_binary_checksums:
-  arm:
-    3.2.0: 0
-    3.1.3: 0
-    3.1.2: 0
-    3.1.1: 0
-    3.1.0: 0
-    3.0.2: 0
-    3.0.1: 0
-  arm64:
-    3.2.0: 0
-    3.1.3: 0
-    3.1.2: 0
-    3.1.1: 0
-    3.1.0: 0
-    3.0.2: 0
-    3.0.1: 0
   amd64:
     3.2.0: 21bb8484a060450d6522f29bed7d88d773c28520774eaa2c522b6f47fd12c4a1
     3.1.3: 266c906222c85b67867dea3c9bdb58c6da0b656be3a29f9e0bed227c939f3f26
@@ -704,24 +530,7 @@ kata_containers_binary_checksums:
     3.1.0: 452cc850e021539c14359d016aba18ddba128f59aa9ab637738296d9b5cd78a0
     3.0.2: a32dc555ffae23f3caab3bc57b03d5ed7792f651221f6cb95cdfe906e18c4bd1
     3.0.1: e2505482f68cc1b1417b8011f2755bf87171a8dd6daaace28531746118fbddaa
-  ppc64le:
-    3.2.0: 0
-    3.1.3: 0
-    3.1.2: 0
-    3.1.1: 0
-    3.1.0: 0
-    3.0.2: 0
-    3.0.1: 0
 gvisor_runsc_binary_checksums:
-  arm:
-    20240305: 0
-    20240212: 0
-    20240206: 0
-    20240129: 0
-    20240122: 0
-    20240115: 0
-    20240109: 0
-    20231218: 0
   arm64:
     20240305: b8b54b45fed2dd1fa14decefecc68c8da605b8abaaee97a0550deeee4afc427f
     20240212: a03fb515df9cabf1c618193e9ed7400543c0410ab7107d1ce291ebc9212521cf
@@ -740,25 +549,7 @@ gvisor_runsc_binary_checksums:
     20240115: 9ae176da972b288880e69b1a438052eea2c502b6292aea8a1a33fbcf65e135dd
     20240109: f32810820c81a4dfe570080c06c5dabfc1be74ec0d5da659f93ae5cc1fc5c098
     20231218: c353d36a134dfc2fab8509f72a34abf6a761603975eb00a39e4077c41aeaf31b
-  ppc64le:
-    20240305: 0
-    20240212: 0
-    20240206: 0
-    20240129: 0
-    20240122: 0
-    20240115: 0
-    20240109: 0
-    20231218: 0
 gvisor_containerd_shim_binary_checksums:
-  arm:
-    20240305: 0
-    20240212: 0
-    20240206: 0
-    20240129: 0
-    20240122: 0
-    20240115: 0
-    20240109: 0
-    20231218: 0
   arm64:
     20240305: 466c51e4f4bf592da0edf8c70c70ba74f026bb48f980bb28ffb582a93c88c049
     20240212: 4b122fd5684c068d5d73189a30a8130cc5280aefadda0b8532321446c9c79c90
@@ -777,15 +568,6 @@ gvisor_containerd_shim_binary_checksums:
     20240115: b95d05f667f1040cb07f262f27396d1deb23573ce4c4a31ea3568e6ca3b70c24
     20240109: d677683326cfd42c7913636651f74ffd1a6866066877903d8a58c644422c2e18
     20231218: a0578a357feb9320298730bf5ba683880ba35c476dc74dc82c79f0b5acc42656
-  ppc64le:
-    20240305: 0
-    20240212: 0
-    20240206: 0
-    20240129: 0
-    20240122: 0
-    20240115: 0
-    20240109: 0
-    20231218: 0
 nerdctl_archive_checksums:
   arm:
     1.7.7: 26582565426152dc426fd47d8090547128e415314f36710bc58ab475160ab0a4
@@ -824,54 +606,6 @@ nerdctl_archive_checksums:
     1.7.1: 09fd0cbef25c98e08c5cc2d1e39da279cbf66c430fdf6c8738e56ce8f949dad9
     1.7.0: e421ae655ff68461bad04b4a1a0ffe40c6f0fcfb0847d5730d66cd95a7fd10cd
 containerd_archive_checksums:
-  arm:
-    1.7.23: 0
-    1.7.22: 0
-    1.7.21: 0
-    1.7.20: 0
-    1.7.19: 0
-    1.7.18: 0
-    1.7.17: 0
-    1.7.16: 0
-    1.7.15: 0
-    1.7.14: 0
-    1.7.13: 0
-    1.7.12: 0
-    1.7.11: 0
-    1.7.10: 0
-    1.7.9: 0
-    1.7.8: 0
-    1.7.7: 0
-    1.7.6: 0
-    1.7.5: 0
-    1.7.4: 0
-    1.7.3: 0
-    1.7.2: 0
-    1.7.1: 0
-    1.7.0: 0
-    1.6.36: 0
-    1.6.35: 0
-    1.6.34: 0
-    1.6.33: 0
-    1.6.32: 0
-    1.6.31: 0
-    1.6.30: 0
-    1.6.29: 0
-    1.6.28: 0
-    1.6.27: 0
-    1.6.26: 0
-    1.6.25: 0
-    1.6.24: 0
-    1.6.23: 0
-    1.6.22: 0
-    1.6.21: 0
-    1.6.20: 0
-    1.6.19: 0
-    1.6.18: 0
-    1.6.17: 0
-    1.6.16: 0
-    1.6.15: 0
-    1.6.14: 0
   arm64:
     1.7.24: 420406d2b34ebb422ab3755fbeede59bf3bfcfccf5cfa584b558c93769d99064
     1.7.23: 6a66b5e63a5e88ff7eeb478ccaca9083d44e51e1d7261ae183fe5951a6226ccd
@@ -905,7 +639,6 @@ containerd_archive_checksums:
     1.6.32: a9cb16bafbf1eb8cea11b4803d76f78cf7bef311b951dd1ae49c238bb41ec649
     1.6.31: 91a74cc602c7724668537f754006692114af70cfb6ef840b288f922fa68f7ed7
     1.6.30: 0bbf1eed508d6ebc240b900648c76f12a07c0c6125aa8c22d46c9ce24252f9e3
-    1.6.29: 0
     1.6.28: 96a231f875ddf9cc7682b881d408ae993f2bd5d0a40402a74ec4fda672047427
     1.6.27: 433b0e8113adfd726374e04fc2f61dafad65c53db5665569f2715a7a916a1813
     1.6.26: 177bed65b6425255bacbe48d99ea7aa5209d381576962c0962dc8615ef16c5c5
@@ -954,7 +687,6 @@ containerd_archive_checksums:
     1.6.32: 7acab4dda6edb7e8e0a6cfc3abd9f323db05a3d92a8a1842de8f6c9e28af501d
     1.6.31: 52080601f414b7e63a5b8e0cb8c1d641c9e070447ac96da9b1aeb00480744ba5
     1.6.30: 1f1b65190b626883394e6f2ecbe5141afc6c45fc1ca035ef052e66bb2c479a5f
-    1.6.29: 0
     1.6.28: b2f15c722d1cc8b74ed643068e043b92bd031fc23d53488d1e837cf4b2777391
     1.6.27: 8c0b04a8b39127c084d490cca905d565c94929dd15e168b0f8663076fdcf5539
     1.6.26: fa806d3e945a8ad25aa1f8123a98524768ead83af2ed1ab3d922d2dd5fe6b14c
@@ -1003,7 +735,6 @@ containerd_archive_checksums:
     1.6.32: d733e4b66ca2bc8191ae5e8770e4806ebd4094fdc657258045b925930ad9bfc5
     1.6.31: 4458a2398f27241b6e674ea9ba1f56dc4d9ab9dacc5a07469602776c3e428110
     1.6.30: ba3d790f504a845b060e2faae3cc0603afd125ebdddb3bdb513b8d70a4337d87
-    1.6.29: 0
     1.6.28: 35411f9d1bafc9cae91c2e30d46a59d01bffc7e18ac7f0942dca9d1d5907ab38
     1.6.27: 8106915bc62c51383baa77925748505e79229fded7efcd7e74cb352ad10d0ce9
     1.6.26: 75fb01a4bd3bcd16263c2f833b8e7081356e2e390dd7eb0710232cb04dac5a01
@@ -1020,18 +751,6 @@ containerd_archive_checksums:
     1.6.15: 502f3e4c8ea2018aaa285fe4f704bfd560fdf93193bb829dd9302d013bc38370
     1.6.14: 73025da0666079fc3bbd48cf185da320955d323c7dc42d8a4ade0e7926d62bb0
 skopeo_binary_checksums:
-  arm:
-    v1.16.1: 0
-    v1.16.0: 0
-    v1.15.2: 0
-    v1.15.1: 0
-    v1.15.0: 0
-    v1.14.2: 0
-    v1.14.1: 0
-    v1.13.3: 0
-    v1.13.2: 0
-    v1.13.1: 0
-    v1.13.0: 0
   arm64:
     v1.16.1: 3272f15f469af843d325134ff8a77a069d647c5f247766715c098b8f0622b627
     v1.16.0: 331b09b3b6e6550c178ea1c2fb2bdc5bdbd90c6f6e8d86a974f1117d6ab2fabe
@@ -1071,18 +790,11 @@ skopeo_binary_checksums:
     v1.14.5: 4ed476c46fabb3b320aac9b88ddc1b7a2665cb151a93482db7cb98e5768a768f
     v1.14.4: f1b37ad1b83bd43bada6e49518165cf41d727d0662351dc5fcc9a46f0c3b4482
     v1.14.3: 9028b7c4aafe235f1ba4efd57435b97ace341e544d3a6807440ac3b0f32d7d73
-    v1.14.2: 0
-    v1.14.1: 0
-    v1.13.3: 0
-    v1.13.2: 0
-    v1.13.1: 0
-    v1.13.0: 0
 yq_checksums:
   arm:
     v4.42.1: 4e3fe0c37793d28e96d465d9958fbf679d8c616e1857d0faf7980ad087f32aee
     v4.41.1: ccd50344652c02574ca7dd123c7d66a06b391838e8ca6088b688e6edf2e25d0c
     v4.40.7: fb922bb1e3974fbd15957feafb5e9bbabe43f4192999cf9b3e0e470815f2e0da
-    v4.40.6: 0
     v4.40.5: c587b2411e43d3fbcdd24c233fb558a362b5111a8446b23f9ce9a4a5665a7041
     v4.40.4: 2ff3f17483f2172a20130b16328114bfe6abd7d3068d66d8194a5093079e8529
     v4.40.3: 6a97856e8b4ef992ce08dcfdf97fec517cf612b1a89078406f401673f126c21c
@@ -1090,7 +802,6 @@ yq_checksums:
     v4.42.1: 16a57531a594b66c3e0981cd93f9e9cd4b684a347b86eaf5e3f409074ad67eb8
     v4.41.1: 066aa930d74e39a25447b1900d8cbb3e1c7df72cd75bc203bc6ae5ee577a5b4a
     v4.40.7: a84f2c8f105b70cd348c3bf14048aeb1665c2e7314cbe9aaff15479f268b8412
-    v4.40.6: 0
     v4.40.5: 9431f0fa39a0af03a152d7fe19a86e42e9ff28d503ed4a70598f9261ec944a97
     v4.40.4: 79c61a1ebfedb165ec8c4678777775b52e2c581801f5d4cd80f97300852fe0f0
     v4.40.3: 44a5cca10d33019b8a46212882197be4f961dfe7deddde0af497065aa980a6a4
@@ -1098,7 +809,6 @@ yq_checksums:
     v4.42.1: 1a95960dddd426321354d58d2beac457717f7c49a9ec0806749a5a9e400eb45e
     v4.41.1: ce0d5a61c256a463fd32f67f133e0c2948bc2cf77d44c42ff335a40e6bef34bf
     v4.40.7: 4f13ee9303a49f7e8f61e7d9c87402e07cc920ae8dfaaa8c10d7ea1b8f9f48ed
-    v4.40.6: 0
     v4.40.5: 0d6aaf1cf44a8d18fbc7ed0ef14f735a8df8d2e314c4cc0f0242d35c0a440c95
     v4.40.4: f9163412d9aa2aa55e888fdcaf2b4053ada20074be35f701424caa7163100704
     v4.40.3: 6e9a5ed9591dbf1d13aaec4efaaf0ecdaf4945ea393b9ce01f4c3dea22311470
@@ -1106,7 +816,6 @@ yq_checksums:
     v4.42.1: d0d1cdbd2c4a7e6995433baf879cadaa47f6f12290e1661ea11933ed90baccb6
     v4.41.1: eed2af79d0ad787878b2d5c7c592e43ac152208d9ed432b42a43663167e276e8
     v4.40.7: ac0e8d06a7ed9afc108b4e2e9d6900312b01757f61b75fcecb809f15c39b10e7
-    v4.40.6: 0
     v4.40.5: a1df9d2b872fbb30583526bf4f37f737dc1913b28606dfc1dafeaf56a8862b3d
     v4.40.4: c67379085a44558825a60a8af3b59b400852b168356070829bc0f45c70553f45
     v4.40.3: 2fe818a0b141913a41548e0e727267479d0f755221c73f9e304788c8e9139a45
