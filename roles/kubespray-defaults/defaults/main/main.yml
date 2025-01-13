@@ -18,17 +18,17 @@ kubelet_fail_swap_on: true
 kubelet_swap_behavior: LimitedSwap
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.32.0
+kube_version: 1.32.0
 
 ## The minimum version working
-kube_version_min_required: v1.30.0
+kube_version_min_required: 1.30.0
 
 ## Kube Proxy mode One of ['iptables', 'ipvs']
 kube_proxy_mode: ipvs
 
 # Kubeadm config api version
 # If kube_version is v1.31 or higher, it will be v1beta4, otherwise it will be v1beta3.
-kubeadm_config_api_version: "{{ 'v1beta4' if kube_version is version('v1.31.0', '>=') else 'v1beta3' }}"
+kubeadm_config_api_version: "{{ 'v1beta4' if kube_version is version('1.31.0', '>=') else 'v1beta3' }}"
 
 ## The timeout for init first control-plane
 kubeadm_init_timeout: 300s

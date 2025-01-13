@@ -75,7 +75,7 @@ image_arch: "{{ host_architecture | default('amd64') }}"
 
 # Versions
 crun_version: 1.17
-runc_version: v1.2.3
+runc_version: 1.2.3
 kata_containers_version: 3.1.3
 youki_version: 0.4.1
 gvisor_version: "20240305.0"
@@ -100,7 +100,7 @@ github_image_repo: "ghcr.io"
 
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
-calico_version: "v3.29.1"
+calico_version: 3.29.1
 calico_ctl_version: "{{ calico_version }}"
 calico_cni_version: "{{ calico_version }}"
 calico_policy_version: "{{ calico_version }}"
@@ -109,58 +109,58 @@ calico_apiserver_version: "{{ calico_version }}"
 typha_enabled: false
 calico_apiserver_enabled: false
 
-flannel_version: "v0.22.0"
-flannel_cni_version: "v1.1.2"
+flannel_version: 0.22.0
+flannel_cni_version: 1.1.2
 weave_version: 2.8.7
-cni_version: "v1.4.0"
+cni_version: 1.4.0
 
-cilium_version: "v1.15.9"
-cilium_cli_version: "v0.16.0"
+cilium_version: 1.15.9
+cilium_cli_version: 0.16.0
 cilium_enable_hubble: false
 
-kube_ovn_version: "v1.12.21"
-kube_ovn_dpdk_version: "19.11-{{ kube_ovn_version }}"
-kube_router_version: "v2.0.0"
-multus_version: "v4.1.0"
-helm_version: "v3.16.4"
-nerdctl_version: "1.7.7"
-skopeo_version: "v1.16.1"
+kube_ovn_version: 1.12.21
+kube_ovn_dpdk_version: "19.11-v{{ kube_ovn_version }}"
+kube_router_version: 2.0.0
+multus_version: 4.1.0
+helm_version: 3.16.4
+nerdctl_version: 1.7.7
+skopeo_version: 1.16.1
 
 # Get kubernetes major version (i.e. 1.17.4 => 1.17)
-kube_major_version: "{{ kube_version | regex_replace('^v([0-9])+\\.([0-9]+)\\.[0-9]+', 'v\\1.\\2') }}"
+kube_major_version: "{{ (kube_version | split('.'))[:-1] | join('.') }}"
 
 pod_infra_supported_versions:
-  v1.32: "3.10"
-  v1.31: "3.10"
-  v1.30: "3.9"
+  '1.32': '3.10'
+  '1.31': '3.10'
+  '1.30': '3.9'
 pod_infra_version: "{{ pod_infra_supported_versions[kube_major_version] }}"
 
 etcd_supported_versions:
-  v1.32: "v3.5.16"
-  v1.31: "v3.5.16"
-  v1.30: "v3.5.16"
+  '1.32': 3.5.16
+  '1.31': 3.5.16
+  '1.30': 3.5.16
 etcd_version: "{{ etcd_supported_versions[kube_major_version] }}"
 
 crictl_supported_versions:
-  v1.32: "v1.32.0"
-  v1.31: "v1.31.1"
-  v1.30: "v1.30.1"
+  '1.32': 1.32.0
+  '1.31': 1.31.1
+  '1.30': 1.30.1
 crictl_version: "{{ crictl_supported_versions[kube_major_version] }}"
 
 crio_supported_versions:
-  v1.32: v1.32.0
-  v1.31: v1.31.3
-  v1.30: v1.30.3
+  '1.32': 1.32.0
+  '1.31': 1.31.3
+  '1.30': 1.30.3
 crio_version: "{{ crio_supported_versions[kube_major_version] }}"
 
 # Scheduler plugins doesn't build for K8s 1.29 yet
 scheduler_plugins_supported_versions:
-  v1.31: 0
-  v1.30: 0
-  v1.29: 0
+  '1.31': 0
+  '1.30': 0
+  '1.29': 0
 scheduler_plugins_version: "{{ scheduler_plugins_supported_versions[kube_major_version] }}"
 
-yq_version: "v4.42.1"
+yq_version: 4.42.1
 
 github_url: https://github.com
 dl_k8s_io_url: https://dl.k8s.io
@@ -168,18 +168,18 @@ storage_googleapis_url: https://storage.googleapis.com
 get_helm_url: https://get.helm.sh
 
 # Download URLs
-kubelet_download_url: "{{ dl_k8s_io_url }}/release/{{ kube_version }}/bin/linux/{{ image_arch }}/kubelet"
-kubectl_download_url: "{{ dl_k8s_io_url }}/release/{{ kube_version }}/bin/linux/{{ image_arch }}/kubectl"
-kubeadm_download_url: "{{ dl_k8s_io_url }}/release/{{ kube_version }}/bin/linux/{{ image_arch }}/kubeadm"
-etcd_download_url: "{{ github_url }}/etcd-io/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-{{ image_arch }}.tar.gz"
-cni_download_url: "{{ github_url }}/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-linux-{{ image_arch }}-{{ cni_version }}.tgz"
-calicoctl_download_url: "{{ github_url }}/projectcalico/calico/releases/download/{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
-calico_crds_download_url: "{{ github_url }}/projectcalico/calico/archive/{{ calico_version }}.tar.gz"
-ciliumcli_download_url: "{{ github_url }}/cilium/cilium-cli/releases/download/{{ cilium_cli_version }}/cilium-linux-{{ image_arch }}.tar.gz"
-crictl_download_url: "{{ github_url }}/kubernetes-sigs/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
-crio_download_url: "{{ storage_googleapis_url }}/cri-o/artifacts/cri-o.{{ image_arch }}.{{ crio_version }}.tar.gz"
-helm_download_url: "{{ get_helm_url }}/helm-{{ helm_version }}-linux-{{ image_arch }}.tar.gz"
-runc_download_url: "{{ github_url }}/opencontainers/runc/releases/download/{{ runc_version }}/runc.{{ image_arch }}"
+kubelet_download_url: "{{ dl_k8s_io_url }}/release/v{{ kube_version }}/bin/linux/{{ image_arch }}/kubelet"
+kubectl_download_url: "{{ dl_k8s_io_url }}/release/v{{ kube_version }}/bin/linux/{{ image_arch }}/kubectl"
+kubeadm_download_url: "{{ dl_k8s_io_url }}/release/v{{ kube_version }}/bin/linux/{{ image_arch }}/kubeadm"
+etcd_download_url: "{{ github_url }}/etcd-io/etcd/releases/download/v{{ etcd_version }}/etcd-v{{ etcd_version }}-linux-{{ image_arch }}.tar.gz"
+cni_download_url: "{{ github_url }}/containernetworking/plugins/releases/download/v{{ cni_version }}/cni-plugins-linux-{{ image_arch }}-v{{ cni_version }}.tgz"
+calicoctl_download_url: "{{ github_url }}/projectcalico/calico/releases/download/v{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
+calico_crds_download_url: "{{ github_url }}/projectcalico/calico/archive/v{{ calico_version }}.tar.gz"
+ciliumcli_download_url: "{{ github_url }}/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-linux-{{ image_arch }}.tar.gz"
+crictl_download_url: "{{ github_url }}/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
+crio_download_url: "{{ storage_googleapis_url }}/cri-o/artifacts/cri-o.{{ image_arch }}.v{{ crio_version }}.tar.gz"
+helm_download_url: "{{ get_helm_url }}/helm-v{{ helm_version }}-linux-{{ image_arch }}.tar.gz"
+runc_download_url: "{{ github_url }}/opencontainers/runc/releases/download/v{{ runc_version }}/runc.{{ image_arch }}"
 crun_download_url: "{{ github_url }}/containers/crun/releases/download/{{ crun_version }}/crun-{{ crun_version }}-linux-{{ image_arch }}"
 youki_download_url: "{{ github_url }}/containers/youki/releases/download/v{{ youki_version }}/youki-{{ youki_version }}-{{ ansible_architecture }}-musl.tar.gz"
 kata_containers_download_url: "{{ github_url }}/kata-containers/kata-containers/releases/download/{{ kata_containers_version }}/kata-static-{{ kata_containers_version }}-{{ ansible_architecture }}.tar.xz"
@@ -189,7 +189,7 @@ gvisor_containerd_shim_runsc_download_url: "{{ storage_googleapis_url }}/gvisor/
 nerdctl_download_url: "{{ github_url }}/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-{{ nerdctl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
 containerd_download_url: "{{ github_url }}/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}-linux-{{ image_arch }}.tar.gz"
 cri_dockerd_download_url: "{{ github_url }}/Mirantis/cri-dockerd/releases/download/v{{ cri_dockerd_version }}/cri-dockerd-{{ cri_dockerd_version }}.{{ image_arch }}.tgz"
-skopeo_download_url: "{{ github_url }}/lework/skopeo-binary/releases/download/{{ skopeo_version }}/skopeo-linux-{{ image_arch }}"
+skopeo_download_url: "{{ github_url }}/lework/skopeo-binary/releases/download/v{{ skopeo_version }}/skopeo-linux-{{ image_arch }}"
 yq_download_url: "{{ github_url }}/mikefarah/yq/releases/download/{{ yq_version }}/yq_linux_{{ image_arch }}"
 
 etcd_binary_checksum: "{{ etcd_binary_checksums[image_arch][etcd_version] }}"
@@ -225,39 +225,39 @@ skopeo_binary_checksum: "{{ skopeo_binary_checksums[image_arch][skopeo_version] 
 # And use --insecure-registry options for docker
 kube_proxy_image_repo: "{{ kube_image_repo }}/kube-proxy"
 etcd_image_repo: "{{ quay_image_repo }}/coreos/etcd"
-etcd_image_tag: "{{ etcd_version }}"
+etcd_image_tag: "v{{ etcd_version }}"
 flannel_image_repo: "{{ docker_image_repo }}/flannel/flannel"
-flannel_image_tag: "{{ flannel_version }}"
+flannel_image_tag: "v{{ flannel_version }}"
 flannel_init_image_repo: "{{ docker_image_repo }}/flannel/flannel-cni-plugin"
-flannel_init_image_tag: "{{ flannel_cni_version }}"
+flannel_init_image_tag: "v{{ flannel_cni_version }}"
 calico_node_image_repo: "{{ quay_image_repo }}/calico/node"
-calico_node_image_tag: "{{ calico_version }}"
+calico_node_image_tag: "v{{ calico_version }}"
 calico_cni_image_repo: "{{ quay_image_repo }}/calico/cni"
-calico_cni_image_tag: "{{ calico_cni_version }}"
+calico_cni_image_tag: "v{{ calico_cni_version }}"
 calico_policy_image_repo: "{{ quay_image_repo }}/calico/kube-controllers"
-calico_policy_image_tag: "{{ calico_policy_version }}"
+calico_policy_image_tag: "v{{ calico_policy_version }}"
 calico_typha_image_repo: "{{ quay_image_repo }}/calico/typha"
-calico_typha_image_tag: "{{ calico_typha_version }}"
+calico_typha_image_tag: "v{{ calico_typha_version }}"
 calico_apiserver_image_repo: "{{ quay_image_repo }}/calico/apiserver"
-calico_apiserver_image_tag: "{{ calico_apiserver_version }}"
+calico_apiserver_image_tag: "v{{ calico_apiserver_version }}"
 pod_infra_image_repo: "{{ kube_image_repo }}/pause"
 pod_infra_image_tag: "{{ pod_infra_version }}"
-netcheck_version: "v1.2.2"
+netcheck_version: "1.2.2"
 netcheck_agent_image_repo: "{{ docker_image_repo }}/mirantis/k8s-netchecker-agent"
-netcheck_agent_image_tag: "{{ netcheck_version }}"
+netcheck_agent_image_tag: "v{{ netcheck_version }}"
 netcheck_server_image_repo: "{{ docker_image_repo }}/mirantis/k8s-netchecker-server"
-netcheck_server_image_tag: "{{ netcheck_version }}"
+netcheck_server_image_tag: "v{{ netcheck_version }}"
 netcheck_etcd_image_tag: "v3.4.17"
 weave_kube_image_repo: "{{ docker_image_repo }}/rajchaudhuri/weave-kube"
 weave_kube_image_tag: "{{ weave_version }}"
 weave_npc_image_repo: "{{ docker_image_repo }}/rajchaudhuri/weave-npc"
 weave_npc_image_tag: "{{ weave_version }}"
 cilium_image_repo: "{{ quay_image_repo }}/cilium/cilium"
-cilium_image_tag: "{{ cilium_version }}"
+cilium_image_tag: "v{{ cilium_version }}"
 cilium_operator_image_repo: "{{ quay_image_repo }}/cilium/operator"
-cilium_operator_image_tag: "{{ cilium_version }}"
+cilium_operator_image_tag: "v{{ cilium_version }}"
 cilium_hubble_relay_image_repo: "{{ quay_image_repo }}/cilium/hubble-relay"
-cilium_hubble_relay_image_tag: "{{ cilium_version }}"
+cilium_hubble_relay_image_tag: "v{{ cilium_version }}"
 cilium_hubble_certgen_image_repo: "{{ quay_image_repo }}/cilium/certgen"
 cilium_hubble_certgen_image_tag: "v0.1.8"
 cilium_hubble_ui_image_repo: "{{ quay_image_repo }}/cilium/hubble-ui"
@@ -267,15 +267,15 @@ cilium_hubble_ui_backend_image_tag: "v0.11.0"
 cilium_hubble_envoy_image_repo: "{{ docker_image_repo }}/envoyproxy/envoy"
 cilium_hubble_envoy_image_tag: "v1.22.5"
 kube_ovn_container_image_repo: "{{ docker_image_repo }}/kubeovn/kube-ovn"
-kube_ovn_container_image_tag: "{{ kube_ovn_version }}"
+kube_ovn_container_image_tag: "v{{ kube_ovn_version }}"
 kube_ovn_vpc_container_image_repo: "{{ docker_image_repo }}/kubeovn/vpc-nat-gateway"
-kube_ovn_vpc_container_image_tag: "{{ kube_ovn_version }}"
+kube_ovn_vpc_container_image_tag: "v{{ kube_ovn_version }}"
 kube_ovn_dpdk_container_image_repo: "{{ docker_image_repo }}/kubeovn/kube-ovn-dpdk"
 kube_ovn_dpdk_container_image_tag: "{{ kube_ovn_dpdk_version }}"
 kube_router_image_repo: "{{ docker_image_repo }}/cloudnativelabs/kube-router"
-kube_router_image_tag: "{{ kube_router_version }}"
+kube_router_image_tag: "v{{ kube_router_version }}"
 multus_image_repo: "{{ github_image_repo }}/k8snetworkplumbingwg/multus-cni"
-multus_image_tag: "{{ multus_version }}"
+multus_image_tag: "v{{ multus_version }}"
 external_openstack_cloud_controller_image_repo: "{{ kube_image_repo }}/provider-os/openstack-cloud-controller-manager"
 external_openstack_cloud_controller_image_tag: "v1.31.1"
 
@@ -289,59 +289,57 @@ haproxy_image_tag: 2.8.2-alpine
 # Coredns version should be supported by corefile-migration (or at least work with)
 # bundle with kubeadm; if not 'basic' upgrade can sometimes fail
 
-coredns_version: "{{ 'v1.11.3' if (kube_version is version('v1.30.5', '>=')) else 'v1.11.1' }}"
-coredns_image_is_namespaced: "{{ (coredns_version is version('v1.7.1', '>=')) }}"
-
-coredns_image_repo: "{{ kube_image_repo }}{{ '/coredns/coredns' if (coredns_image_is_namespaced | bool) else '/coredns' }}"
-coredns_image_tag: "{{ coredns_version if (coredns_image_is_namespaced | bool) else (coredns_version | regex_replace('^v', '')) }}"
+coredns_version: "{{ '1.11.3' if (kube_version is version('1.30.5', '>=')) else '1.11.1' }}"
+coredns_image_repo: "{{ kube_image_repo }}{{ '/coredns' if coredns_version is version('1.7.1', '>=') else '' }}/coredns"
+coredns_image_tag: "{{ 'v' if coredns_version is version('1.7.1', '>=') else '' }}{{ coredns_version }}"
 
 nodelocaldns_version: "1.22.28"
 nodelocaldns_image_repo: "{{ kube_image_repo }}/dns/k8s-dns-node-cache"
 nodelocaldns_image_tag: "{{ nodelocaldns_version }}"
 
-dnsautoscaler_version: v1.8.8
+dnsautoscaler_version: 1.8.8
 dnsautoscaler_image_repo: "{{ kube_image_repo }}/cpa/cluster-proportional-autoscaler"
-dnsautoscaler_image_tag: "{{ dnsautoscaler_version }}"
+dnsautoscaler_image_tag: "v{{ dnsautoscaler_version }}"
 
 scheduler_plugins_controller_image_repo: "{{ kube_image_repo }}/scheduler-plugins/controller"
-scheduler_plugins_controller_image_tag: "{{ scheduler_plugins_version }}"
+scheduler_plugins_controller_image_tag: "v{{ scheduler_plugins_version }}"
 scheduler_plugins_scheduler_image_repo: "{{ kube_image_repo }}/scheduler-plugins/kube-scheduler"
-scheduler_plugins_scheduler_image_tag: "{{ scheduler_plugins_version }}"
+scheduler_plugins_scheduler_image_tag: "v{{ scheduler_plugins_version }}"
 
 registry_version: "2.8.1"
 registry_image_repo: "{{ docker_image_repo }}/library/registry"
 registry_image_tag: "{{ registry_version }}"
-metrics_server_version: "v0.7.0"
+metrics_server_version: "0.7.0"
 metrics_server_image_repo: "{{ kube_image_repo }}/metrics-server/metrics-server"
-metrics_server_image_tag: "{{ metrics_server_version }}"
-local_volume_provisioner_version: "v2.5.0"
+metrics_server_image_tag: "v{{ metrics_server_version }}"
+local_volume_provisioner_version: "2.5.0"
 local_volume_provisioner_image_repo: "{{ kube_image_repo }}/sig-storage/local-volume-provisioner"
-local_volume_provisioner_image_tag: "{{ local_volume_provisioner_version }}"
-cephfs_provisioner_version: "v2.1.0-k8s1.11"
+local_volume_provisioner_image_tag: "v{{ local_volume_provisioner_version }}"
+cephfs_provisioner_version: "2.1.0-k8s1.11"
 cephfs_provisioner_image_repo: "{{ quay_image_repo }}/external_storage/cephfs-provisioner"
-cephfs_provisioner_image_tag: "{{ cephfs_provisioner_version }}"
-rbd_provisioner_version: "v2.1.1-k8s1.11"
+cephfs_provisioner_image_tag: "v{{ cephfs_provisioner_version }}"
+rbd_provisioner_version: "2.1.1-k8s1.11"
 rbd_provisioner_image_repo: "{{ quay_image_repo }}/external_storage/rbd-provisioner"
-rbd_provisioner_image_tag: "{{ rbd_provisioner_version }}"
-local_path_provisioner_version: "v0.0.24"
+rbd_provisioner_image_tag: "v{{ rbd_provisioner_version }}"
+local_path_provisioner_version: "0.0.24"
 local_path_provisioner_image_repo: "{{ docker_image_repo }}/rancher/local-path-provisioner"
-local_path_provisioner_image_tag: "{{ local_path_provisioner_version }}"
-ingress_nginx_version: "v1.12.0"
+local_path_provisioner_image_tag: "v{{ local_path_provisioner_version }}"
+ingress_nginx_version: "1.12.0"
 ingress_nginx_controller_image_repo: "{{ kube_image_repo }}/ingress-nginx/controller"
 ingress_nginx_opentelemetry_image_repo: "{{ kube_image_repo }}/ingress-nginx/opentelemetry"
-ingress_nginx_controller_image_tag: "{{ ingress_nginx_version }}"
+ingress_nginx_controller_image_tag: "v{{ ingress_nginx_version }}"
 ingress_nginx_opentelemetry_image_tag: "v20230721-3e2062ee5"
 ingress_nginx_kube_webhook_certgen_image_repo: "{{ kube_image_repo }}/ingress-nginx/kube-webhook-certgen"
 ingress_nginx_kube_webhook_certgen_image_tag: "v1.5.0"
 alb_ingress_image_repo: "{{ docker_image_repo }}/amazon/aws-alb-ingress-controller"
 alb_ingress_image_tag: "v1.1.9"
-cert_manager_version: "v1.15.3"
+cert_manager_version: "1.15.3"
 cert_manager_controller_image_repo: "{{ quay_image_repo }}/jetstack/cert-manager-controller"
-cert_manager_controller_image_tag: "{{ cert_manager_version }}"
+cert_manager_controller_image_tag: "v{{ cert_manager_version }}"
 cert_manager_cainjector_image_repo: "{{ quay_image_repo }}/jetstack/cert-manager-cainjector"
-cert_manager_cainjector_image_tag: "{{ cert_manager_version }}"
+cert_manager_cainjector_image_tag: "v{{ cert_manager_version }}"
 cert_manager_webhook_image_repo: "{{ quay_image_repo }}/jetstack/cert-manager-webhook"
-cert_manager_webhook_image_tag: "{{ cert_manager_version }}"
+cert_manager_webhook_image_tag: "v{{ cert_manager_version }}"
 
 csi_attacher_image_repo: "{{ kube_image_repo }}/sig-storage/csi-attacher"
 csi_attacher_image_tag: "v3.3.0"
@@ -357,23 +355,23 @@ csi_livenessprobe_image_repo: "{{ kube_image_repo }}/sig-storage/livenessprobe"
 csi_livenessprobe_image_tag: "v2.5.0"
 
 snapshot_controller_supported_versions:
-  v1.32: "v7.0.2"
-  v1.31: "v7.0.2"
-  v1.30: "v7.0.2"
+  '1.32': "v7.0.2"
+  '1.31': "v7.0.2"
+  '1.30': "v7.0.2"
 snapshot_controller_image_repo: "{{ kube_image_repo }}/sig-storage/snapshot-controller"
 snapshot_controller_image_tag: "{{ snapshot_controller_supported_versions[kube_major_version] }}"
 
-cinder_csi_plugin_version: "v1.30.0"
+cinder_csi_plugin_version: "1.30.0"
 cinder_csi_plugin_image_repo: "{{ kube_image_repo }}/provider-os/cinder-csi-plugin"
-cinder_csi_plugin_image_tag: "{{ cinder_csi_plugin_version }}"
+cinder_csi_plugin_image_tag: "v{{ cinder_csi_plugin_version }}"
 
-aws_ebs_csi_plugin_version: "v0.5.0"
+aws_ebs_csi_plugin_version: "0.5.0"
 aws_ebs_csi_plugin_image_repo: "{{ docker_image_repo }}/amazon/aws-ebs-csi-driver"
-aws_ebs_csi_plugin_image_tag: "{{ aws_ebs_csi_plugin_version }}"
+aws_ebs_csi_plugin_image_tag: "v{{ aws_ebs_csi_plugin_version }}"
 
-gcp_pd_csi_plugin_version: "v1.9.2"
+gcp_pd_csi_plugin_version: "1.9.2"
 gcp_pd_csi_plugin_image_repo: "{{ kube_image_repo }}/cloud-provider-gcp/gcp-compute-persistent-disk-csi-driver"
-gcp_pd_csi_plugin_image_tag: "{{ gcp_pd_csi_plugin_version }}"
+gcp_pd_csi_plugin_image_tag: "v{{ gcp_pd_csi_plugin_version }}"
 
 azure_csi_image_repo: "mcr.microsoft.com/oss/kubernetes-csi"
 azure_csi_provisioner_image_tag: "v2.2.2"
@@ -382,9 +380,9 @@ azure_csi_resizer_image_tag: "v1.3.0"
 azure_csi_livenessprobe_image_tag: "v2.5.0"
 azure_csi_node_registrar_image_tag: "v2.4.0"
 azure_csi_snapshotter_image_tag: "v3.0.3"
-azure_csi_plugin_version: "v1.10.0"
+azure_csi_plugin_version: "1.10.0"
 azure_csi_plugin_image_repo: "mcr.microsoft.com/k8s/csi"
-azure_csi_plugin_image_tag: "{{ azure_csi_plugin_version }}"
+azure_csi_plugin_image_tag: "v{{ azure_csi_plugin_version }}"
 
 gcp_pd_csi_image_repo: "gke.gcr.io"
 gcp_pd_csi_driver_image_tag: "v0.7.0-gke.0"
@@ -400,11 +398,11 @@ dashboard_metrics_scraper_tag: "v1.0.8"
 
 metallb_speaker_image_repo: "{{ quay_image_repo }}/metallb/speaker"
 metallb_controller_image_repo: "{{ quay_image_repo }}/metallb/controller"
-metallb_version: v0.13.9
+metallb_version: 0.13.9
 
-node_feature_discovery_version: v0.16.4
+node_feature_discovery_version: 0.16.4
 node_feature_discovery_image_repo: "{{ kube_image_repo }}/nfd/node-feature-discovery"
-node_feature_discovery_image_tag: "{{ node_feature_discovery_version }}"
+node_feature_discovery_image_tag: "v{{ node_feature_discovery_version }}"
 
 downloads:
   netcheck_server:
@@ -429,7 +427,6 @@ downloads:
     container: "{{ etcd_deployment_type != 'host' }}"
     file: "{{ etcd_deployment_type == 'host' }}"
     enabled: true
-    version: "{{ etcd_version }}"
     dest: "{{ local_release_dir }}/etcd-{{ etcd_version }}-linux-{{ image_arch }}.tar.gz"
     repo: "{{ etcd_image_repo }}"
     tag: "{{ etcd_image_tag }}"
@@ -446,7 +443,6 @@ downloads:
   cni:
     enabled: true
     file: true
-    version: "{{ cni_version }}"
     dest: "{{ local_release_dir }}/cni-plugins-linux-{{ image_arch }}-{{ cni_version }}.tgz"
     sha256: "{{ cni_binary_checksum }}"
     url: "{{ cni_download_url }}"
@@ -459,7 +455,6 @@ downloads:
   kubeadm:
     enabled: true
     file: true
-    version: "{{ kube_version }}"
     dest: "{{ local_release_dir }}/kubeadm-{{ kube_version }}-{{ image_arch }}"
     sha256: "{{ kubeadm_binary_checksum }}"
     url: "{{ kubeadm_download_url }}"
@@ -472,7 +467,6 @@ downloads:
   kubelet:
     enabled: true
     file: true
-    version: "{{ kube_version }}"
     dest: "{{ local_release_dir }}/kubelet-{{ kube_version }}-{{ image_arch }}"
     sha256: "{{ kubelet_binary_checksum }}"
     url: "{{ kubelet_download_url }}"
@@ -485,7 +479,6 @@ downloads:
   kubectl:
     enabled: true
     file: true
-    version: "{{ kube_version }}"
     dest: "{{ local_release_dir }}/kubectl-{{ kube_version }}-{{ image_arch }}"
     sha256: "{{ kubectl_binary_checksum }}"
     url: "{{ kubectl_download_url }}"
@@ -498,7 +491,6 @@ downloads:
   crictl:
     file: true
     enabled: true
-    version: "{{ crictl_version }}"
     dest: "{{ local_release_dir }}/crictl-{{ crictl_version }}-linux-{{ image_arch }}.tar.gz"
     sha256: "{{ crictl_binary_checksum }}"
     url: "{{ crictl_download_url }}"
@@ -511,7 +503,6 @@ downloads:
   crio:
     file: true
     enabled: "{{ container_manager == 'crio' }}"
-    version: "{{ crio_version }}"
     dest: "{{ local_release_dir }}/cri-o.{{ image_arch }}.{{ crio_version }}.tar.gz"
     sha256: "{{ crio_archive_checksum }}"
     url: "{{ crio_download_url }}"
@@ -524,7 +515,6 @@ downloads:
   cri_dockerd:
     file: true
     enabled: "{{ container_manager == 'docker' }}"
-    version: "{{ cri_dockerd_version }}"
     dest: "{{ local_release_dir }}/cri-dockerd-{{ cri_dockerd_version }}.{{ image_arch }}.tar.gz"
     sha256: "{{ cri_dockerd_archive_checksum }}"
     url: "{{ cri_dockerd_download_url }}"
@@ -539,7 +529,6 @@ downloads:
   crun:
     file: true
     enabled: "{{ crun_enabled }}"
-    version: "{{ crun_version }}"
     dest: "{{ local_release_dir }}/crun-{{ crun_version }}-{{ image_arch }}"
     sha256: "{{ crun_binary_checksum }}"
     url: "{{ crun_download_url }}"
@@ -552,7 +541,6 @@ downloads:
   youki:
     file: true
     enabled: "{{ youki_enabled }}"
-    version: "{{ youki_version }}"
     dest: "{{ local_release_dir }}/youki-{{ youki_version }}-{{ ansible_architecture }}.tar.gz"
     sha256: "{{ youki_archive_checksum }}"
     url: "{{ youki_download_url }}"
@@ -565,7 +553,6 @@ downloads:
   runc:
     file: true
     enabled: "{{ container_manager == 'containerd' }}"
-    version: "{{ runc_version }}"
     dest: "{{ local_release_dir }}/runc-{{ runc_version }}.{{ image_arch }}"
     sha256: "{{ runc_binary_checksum }}"
     url: "{{ runc_download_url }}"
@@ -578,7 +565,6 @@ downloads:
   kata_containers:
     enabled: "{{ kata_containers_enabled }}"
     file: true
-    version: "{{ kata_containers_version }}"
     dest: "{{ local_release_dir }}/kata-static-{{ kata_containers_version }}-{{ image_arch }}.tar.xz"
     sha256: "{{ kata_containers_binary_checksum }}"
     url: "{{ kata_containers_download_url }}"
@@ -591,7 +577,6 @@ downloads:
   containerd:
     enabled: "{{ container_manager == 'containerd' }}"
     file: true
-    version: "{{ containerd_version }}"
     dest: "{{ local_release_dir }}/containerd-{{ containerd_version }}-linux-{{ image_arch }}.tar.gz"
     sha256: "{{ containerd_archive_checksum }}"
     url: "{{ containerd_download_url }}"
@@ -604,7 +589,6 @@ downloads:
   gvisor_runsc:
     enabled: "{{ gvisor_enabled }}"
     file: true
-    version: "{{ gvisor_version }}"
     dest: "{{ local_release_dir }}/gvisor-runsc-{{ gvisor_version }}-{{ ansible_architecture }}"
     sha256: "{{ gvisor_runsc_binary_checksum }}"
     url: "{{ gvisor_runsc_download_url }}"
@@ -617,7 +601,6 @@ downloads:
   gvisor_containerd_shim:
     enabled: "{{ gvisor_enabled }}"
     file: true
-    version: "{{ gvisor_version }}"
     dest: "{{ local_release_dir }}/gvisor-containerd-shim-runsc-v1-{{ gvisor_version }}-{{ ansible_architecture }}"
     sha256: "{{ gvisor_containerd_shim_binary_checksum }}"
     url: "{{ gvisor_containerd_shim_runsc_download_url }}"
@@ -630,7 +613,6 @@ downloads:
   nerdctl:
     file: true
     enabled: "{{ container_manager == 'containerd' }}"
-    version: "{{ nerdctl_version }}"
     dest: "{{ local_release_dir }}/nerdctl-{{ nerdctl_version }}-linux-{{ image_arch }}.tar.gz"
     sha256: "{{ nerdctl_archive_checksum }}"
     url: "{{ nerdctl_download_url }}"
@@ -643,7 +625,6 @@ downloads:
   skopeo:
     file: true
     enabled: "{{ container_manager == 'crio' }}"
-    version: "{{ skopeo_version }}"
     dest: "{{ local_release_dir }}/skopeo-{{ skopeo_version }}-{{ image_arch }}"
     sha256: "{{ skopeo_binary_checksum }}"
     url: "{{ skopeo_download_url }}"
@@ -719,7 +700,6 @@ downloads:
   ciliumcli:
     enabled: "{{ kube_network_plugin == 'cilium' or cilium_deploy_additionally | default(false) | bool }}"
     file: true
-    version: "{{ cilium_cli_version }}"
     dest: "{{ local_release_dir }}/cilium-{{ cilium_cli_version }}-{{ image_arch }}.tar.gz"
     sha256: "{{ ciliumcli_binary_checksum }}"
     url: "{{ ciliumcli_download_url }}"
@@ -759,7 +739,6 @@ downloads:
   calicoctl:
     enabled: "{{ kube_network_plugin == 'calico' }}"
     file: true
-    version: "{{ calico_ctl_version }}"
     dest: "{{ local_release_dir }}/calicoctl-{{ calico_ctl_version }}-{{ image_arch }}"
     sha256: "{{ calicoctl_binary_checksum }}"
     url: "{{ calicoctl_download_url }}"
@@ -817,15 +796,14 @@ downloads:
   calico_crds:
     file: true
     enabled: "{{ kube_network_plugin == 'calico' and calico_datastore == 'kdd' }}"
-    version: "{{ calico_version }}"
     dest: "{{ local_release_dir }}/calico-{{ calico_version }}-kdd-crds/{{ calico_version }}.tar.gz"
     sha256: "{{ calico_crds_archive_checksum }}"
     url: "{{ calico_crds_download_url }}"
     unarchive: true
     unarchive_extra_opts:
-      - "{{ '--strip=6' if (calico_version is version('v3.22.3', '<')) else '--strip=3' }}"
+      - "{{ '--strip=6' if (calico_version is version('3.22.3', '<')) else '--strip=3' }}"
       - "--wildcards"
-      - "{{ '*/_includes/charts/calico/crds/kdd/' if (calico_version is version('v3.22.3', '<')) else '*/libcalico-go/config/crd/' }}"
+      - "{{ '*/_includes/charts/calico/crds/kdd/' if (calico_version is version('3.22.3', '<')) else '*/libcalico-go/config/crd/' }}"
     owner: "root"
     mode: "0755"
     groups:
@@ -933,7 +911,6 @@ downloads:
   helm:
     enabled: "{{ helm_enabled }}"
     file: true
-    version: "{{ helm_version }}"
     dest: "{{ local_release_dir }}/helm-{{ helm_version }}/helm-{{ helm_version }}-linux-{{ image_arch }}.tar.gz"
     sha256: "{{ helm_archive_checksum }}"
     url: "{{ helm_download_url }}"
@@ -1170,7 +1147,6 @@ download_defaults:
   tag: None
   enabled: false
   dest: None
-  version: None
   url: None
   unarchive: false
   owner: "{{ kube_owner }}"
