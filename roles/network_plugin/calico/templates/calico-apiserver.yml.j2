@@ -72,7 +72,7 @@ spec:
           initialDelaySeconds: 90
           periodSeconds: 10
         name: calico-apiserver
-{% if calico_version is version('v3.28.0', '>=') %}
+{% if calico_version is version('3.28.0', '>=') %}
         readinessProbe:
           httpGet:
             path: /readyz
@@ -184,7 +184,7 @@ rules:
   - create
   - update
   - delete
-{% if calico_version is version('v3.28.0', '>=') %}
+{% if calico_version is version('3.28.0', '>=') %}
 - apiGroups:
   - policy
   resourceNames:

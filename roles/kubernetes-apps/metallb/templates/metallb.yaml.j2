@@ -1716,7 +1716,7 @@ spec:
           value: memberlist
         - name: METALLB_DEPLOYMENT
           value: controller
-        image: "{{ metallb_controller_image_repo }}:{{ metallb_version }}"
+        image: "{{ metallb_controller_image_repo }}:v{{ metallb_version }}"
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -1824,7 +1824,7 @@ spec:
             secretKeyRef:
               key: secretkey
               name: memberlist
-        image: "{{ metallb_speaker_image_repo }}:{{ metallb_version }}"
+        image: "{{ metallb_speaker_image_repo }}:v{{ metallb_version }}"
         livenessProbe:
           failureThreshold: 3
           httpGet:

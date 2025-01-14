@@ -69,7 +69,7 @@ data:
   # custom-cni-conf to "true", otherwise Cilium may overwrite the configuration.
   custom-cni-conf: "false"
 
-{% if cilium_version | regex_replace('v') is version('1.14.0', '>=') %}
+{% if cilium_version is version('1.14.0', '>=') %}
   # Tell the agent to generate and write a CNI configuration file
   write-cni-conf-when-ready: /host/etc/cni/net.d/05-cilium.conflist
   cni-exclusive: "{{ cilium_cni_exclusive }}"
@@ -122,11 +122,11 @@ data:
   #   - disabled
   #   - vxlan (default)
   #   - geneve
-{% if cilium_version | regex_replace('v') is version('1.14.0', '<') %}
+{% if cilium_version is version('1.14.0', '<') %}
   tunnel: "{{ cilium_tunnel_mode }}"
-{% elif cilium_version | regex_replace('v') is version('1.14.0', '>=') and cilium_tunnel_mode == 'disabled' %}
+{% elif cilium_version is version('1.14.0', '>=') and cilium_tunnel_mode == 'disabled' %}
   routing-mode: 'native'
-{% elif cilium_version | regex_replace('v') is version('1.14.0', '>=') and cilium_tunnel_mode != 'disabled' %}
+{% elif cilium_version is version('1.14.0', '>=') and cilium_tunnel_mode != 'disabled' %}
   routing-mode: 'tunnel'
   tunnel-protocol: "{{ cilium_tunnel_mode }}"
 {% endif %}
@@ -162,7 +162,7 @@ data:
 
 # `wait-bpf-mount` is removed after v1.10.4
 # https://github.com/cilium/cilium/commit/d2217045cb3726a7f823174e086913b69b8090da
-{% if cilium_version | regex_replace('v') is version('1.10.4', '<') %}
+{% if cilium_version is version('1.10.4', '<') %}
   # wait-bpf-mount makes init container wait until bpf filesystem is mounted
   wait-bpf-mount: "false"
 {% endif %}
@@ -170,7 +170,7 @@ data:
 # `kube-proxy-replacement=partial|strict|disabled` is deprecated since january 2024 and unsupported in 1.16.
 # Replaced by `kube-proxy-replacement=true|false`
 # https://github.com/cilium/cilium/pull/31286
-{% if cilium_version | regex_replace('v') is version('1.16', '<') %}
+{% if cilium_version is version('1.16', '<') %}
   kube-proxy-replacement: "{{ cilium_kube_proxy_replacement }}"
 {% else %}
   kube-proxy-replacement: "{% if (cilium_kube_proxy_replacement == 'strict') or (cilium_kube_proxy_replacement | bool) or (cilium_kube_proxy_replacement | string | lower == 'true') %}true{% else %}false{% endif %}"
@@ -179,7 +179,7 @@ data:
 # `native-routing-cidr` is deprecated in 1.10, removed in 1.12.
 # Replaced by `ipv4-native-routing-cidr`
 # https://github.com/cilium/cilium/pull/16695
-{% if cilium_version | regex_replace('v') is version('1.12', '<') %}
+{% if cilium_version is version('1.12', '<') %}
   native-routing-cidr: "{{ cilium_native_routing_cidr }}"
 {% else %}
 {% if cilium_native_routing_cidr | length %}
@@ -253,7 +253,7 @@ data:
 
   agent-health-port: "{{ cilium_agent_health_port }}"
 
-{% if cilium_version | regex_replace('v') is version('1.11', '>=') and cilium_cgroup_host_root != '' %}
+{% if cilium_version is version('1.11', '>=') and cilium_cgroup_host_root != '' %}
   cgroup-root: "{{ cilium_cgroup_host_root }}"
 {% endif %}
 

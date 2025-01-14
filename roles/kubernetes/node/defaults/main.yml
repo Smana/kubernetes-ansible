@@ -59,7 +59,7 @@ eviction_hard_control_plane: {}
 kubelet_status_update_frequency: 10s
 
 # kube-vip
-kube_vip_version: v0.8.0
+kube_vip_version: 0.8.0
 
 kube_vip_arp_enabled: false
 kube_vip_interface:

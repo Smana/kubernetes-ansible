@@ -6,7 +6,7 @@ nodeRegistration:
 apiVersion: kubeadm.k8s.io/{{ kubeadm_config_api_version }}
 kind: ClusterConfiguration
 imageRepository: {{ kube_image_repo }}
-kubernetesVersion: {{ kube_version }}
+kubernetesVersion: v{{ kube_version }}
 etcd:
 {% if etcd_deployment_type == "kubeadm" %}
   local:

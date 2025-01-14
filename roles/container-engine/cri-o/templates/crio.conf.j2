@@ -382,7 +382,7 @@ enable_metrics = {{ crio_enable_metrics | bool | lower }}
 # The port on which the metrics server will listen.
 metrics_port = {{ crio_metrics_port }}
 
-{% if nri_enabled and crio_version is version('v1.26.0', operator='>=') %}
+{% if nri_enabled and crio_version is version('1.26.0', operator='>=') %}
 [crio.nri]
 
 enable_nri=true

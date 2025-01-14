@@ -11,7 +11,7 @@ cilium_enable_ipv6: false
 cilium_l2announcements: false
 
 # Cilium agent health port
-cilium_agent_health_port: "{%- if cilium_version | regex_replace('v') is version('1.11.6', '>=') -%}9879{%- else -%}9876{%- endif -%}"
+cilium_agent_health_port: "{%- if cilium_version is version('1.11.6', '>=') -%}9879{%- else -%}9876{%- endif -%}"
 
 # Identity allocation mode selects how identities are shared between cilium
 # nodes by setting how they are stored. The options are "crd" or "kvstore".
@@ -307,9 +307,9 @@ cilium_rolling_restart_wait_retries_count: 30
 cilium_rolling_restart_wait_retries_delay_seconds: 10
 
 # Cilium changed the default metrics exporter ports in 1.12
-cilium_agent_scrape_port: "{{ cilium_version | regex_replace('v') is version('1.12', '>=') | ternary('9962', '9090') }}"
-cilium_operator_scrape_port: "{{ cilium_version | regex_replace('v') is version('1.12', '>=') | ternary('9963', '6942') }}"
-cilium_hubble_scrape_port: "{{ cilium_version | regex_replace('v') is version('1.12', '>=') | ternary('9965', '9091') }}"
+cilium_agent_scrape_port: "{{ cilium_version is version('1.12', '>=') | ternary('9962', '9090') }}"
+cilium_operator_scrape_port: "{{ cilium_version is version('1.12', '>=') | ternary('9963', '6942') }}"
+cilium_hubble_scrape_port: "{{ cilium_version is version('1.12', '>=') | ternary('9965', '9091') }}"
 
 # Cilium certgen args for generate certificate for hubble mTLS
 cilium_certgen_args:
