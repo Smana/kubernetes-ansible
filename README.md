@@ -99,39 +99,39 @@ Note:
 <!-- BEGIN ANSIBLE MANAGED BLOCK -->
 
 - Core
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.32.0
-  - [etcd](https://github.com/etcd-io/etcd) v3.5.16
+  - [kubernetes](https://github.com/kubernetes/kubernetes) 1.32.0
+  - [etcd](https://github.com/etcd-io/etcd) 3.5.16
   - [docker](https://www.docker.com/) v26.1
   - [containerd](https://containerd.io/) v1.7.24
-  - [cri-o](http://cri-o.io/) v1.32.0 (experimental: see [CRI-O Note](docs/CRI/cri-o.md). Only on fedora, ubuntu and centos based OS)
+  - [cri-o](http://cri-o.io/) 1.32.0 (experimental: see [CRI-O Note](docs/CRI/cri-o.md). Only on fedora, ubuntu and centos based OS)
 - Network Plugin
-  - [cni-plugins](https://github.com/containernetworking/plugins) v1.4.0
-  - [calico](https://github.com/projectcalico/calico) v3.29.1
-  - [cilium](https://github.com/cilium/cilium) v1.15.9
-  - [flannel](https://github.com/flannel-io/flannel) v0.22.0
-  - [kube-ovn](https://github.com/alauda/kube-ovn) v1.12.21
-  - [kube-router](https://github.com/cloudnativelabs/kube-router) v2.0.0
-  - [multus](https://github.com/k8snetworkplumbingwg/multus-cni) v4.1.0
+  - [cni-plugins](https://github.com/containernetworking/plugins) 1.4.0
+  - [calico](https://github.com/projectcalico/calico) 3.29.1
+  - [cilium](https://github.com/cilium/cilium) 1.15.9
+  - [flannel](https://github.com/flannel-io/flannel) 0.22.0
+  - [kube-ovn](https://github.com/alauda/kube-ovn) 1.12.21
+  - [kube-router](https://github.com/cloudnativelabs/kube-router) 2.0.0
+  - [multus](https://github.com/k8snetworkplumbingwg/multus-cni) 4.1.0
   - [weave](https://github.com/rajch/weave) v2.8.7
-  - [kube-vip](https://github.com/kube-vip/kube-vip) v0.8.0
+  - [kube-vip](https://github.com/kube-vip/kube-vip) 0.8.0
 - Application
-  - [cert-manager](https://github.com/jetstack/cert-manager) v1.15.3
-  - [coredns](https://github.com/coredns/coredns) v1.11.3
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v1.12.0
-  - [argocd](https://argoproj.github.io/) v2.11.0
-  - [helm](https://helm.sh/) v3.16.4
-  - [metallb](https://metallb.universe.tf/)  v0.13.9
+  - [cert-manager](https://github.com/jetstack/cert-manager) 1.15.3
+  - [coredns](https://github.com/coredns/coredns) 1.11.3
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) 1.12.0
+  - [argocd](https://argoproj.github.io/) 2.11.0
+  - [helm](https://helm.sh/) 3.16.4
+  - [metallb](https://metallb.universe.tf/) 0.13.9
   - [registry](https://github.com/distribution/distribution) v2.8.1
 - Storage Plugin
-  - [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.0-k8s1.11
-  - [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.1-k8s1.11
-  - [aws-ebs-csi-plugin](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) v0.5.0
-  - [azure-csi-plugin](https://github.com/kubernetes-sigs/azuredisk-csi-driver) v1.10.0
-  - [cinder-csi-plugin](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) v1.30.0
-  - [gcp-pd-csi-plugin](https://github.com/kubernetes-sigs/gcp-compute-persistent-disk-csi-driver) v1.9.2
-  - [local-path-provisioner](https://github.com/rancher/local-path-provisioner) v0.0.24
-  - [local-volume-provisioner](https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner) v2.5.0
-  - [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) v0.16.4
+  - [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) 2.1.0-k8s1.11
+  - [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) 2.1.1-k8s1.11
+  - [aws-ebs-csi-plugin](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) 0.5.0
+  - [azure-csi-plugin](https://github.com/kubernetes-sigs/azuredisk-csi-driver) 1.10.0
+  - [cinder-csi-plugin](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) 1.30.0
+  - [gcp-pd-csi-plugin](https://github.com/kubernetes-sigs/gcp-compute-persistent-disk-csi-driver) 1.9.2
+  - [local-path-provisioner](https://github.com/rancher/local-path-provisioner) 0.0.24
+  - [local-volume-provisioner](https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner) 2.5.0
+  - [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery) 0.16.4
 
 <!-- END ANSIBLE MANAGED BLOCK -->
 
