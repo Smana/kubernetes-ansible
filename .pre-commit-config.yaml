@@ -87,6 +87,14 @@ repos:
         entry: scripts/render_readme_version.yml
         pass_filenames: false
 
+      - id: check-checksums-sorted
+        name: Check that our checksums are correctly sorted by version
+        entry: scripts/assert-sorted-checksums.yml
+        language: python
+        pass_filenames: false
+        additional_dependencies:
+          - ansible
+
   - repo: https://github.com/markdownlint/markdownlint
     rev: v0.12.0
     hooks:
