@@ -1,4 +1,5 @@
 ---
+# request and limit
 kube_ovn_db_cpu_request: 500m
 kube_ovn_db_memory_request: 200Mi
 kube_ovn_db_cpu_limit: 3000m
@@ -41,6 +42,12 @@ kube_ovn_ic_autoroute: true
 kube_ovn_ic_dbhost: "127.0.0.1"
 kube_ovn_ic_zone: "kubernetes"
 
+# kube-ovn default subnet
+kube_ovn_default_subnet: "ovn-default"
+kube_ovn_default_vpc: "ovn-cluster"
+kube_ovn_node_subnet: "join"
+kube_ovn_mirror_iface: "mirror0"
+
 # geneve or vlan
 kube_ovn_network_type: geneve
 
@@ -58,7 +65,9 @@ kube_ovn_hw_offload: false
 kube_ovn_traffic_mirror: false
 
 # kube_ovn_pool_cidr_ipv6: fd85:ee78:d8a6:8607::1:0000/112
-# kube_ovn_default_interface_name: eth0
+
+kube_ovn_default_provider_name: provider
+kube_ovn_default_vlan_interface_name: eth0
 
 kube_ovn_external_address: 8.8.8.8
 kube_ovn_external_address_ipv6: 2400:3200::1
@@ -77,6 +86,7 @@ kube_ovn_node_switch_cidr_ipv6: fd00:100:64::/64
 
 ## vlan config, set default interface name and vlan id
 # kube_ovn_default_interface_name: eth0
+kube_ovn_default_vlan_name: vlan100
 kube_ovn_default_vlan_id: 100
 kube_ovn_vlan_name: product
 
@@ -105,14 +115,71 @@ kube_ovn_dpdk_tunnel_iface: br-phy
 ## bind local ip
 kube_ovn_bind_local_ip_enabled: true
 
-## eip snat
-kube_ovn_eip_snat_enabled: true
+## enable compact
+kube_ovn_enable_compact: false
+
+## ovn northd n threads
+kube_ovn_northd_n_threads: 1
+
+## ovn leader probe interval
+kube_ovn_leader_probe_interval: 5
+
+## ovn probe interval
+kube_ovn_probe_interval: 180000
+
+# ovn northd probe interval
+kube_ovn_northd_probe_interval: 5000
+
+# ovn remote probe interval
+kube_ovn_remote_probe_interval: 10000
+
+# ovn remote openflow interval
+kube_ovn_remote_openflow_interval: 180
+
+## eip snat need configmap "ovn-vpc-nat-config" set by user first
+kube_ovn_eip_snat_enabled: false
 
 # ls dnat mod dl dst
 kube_ovn_ls_dnat_mod_dl_dst: true
+
+# ls ct skip dst lport ips
+kube_ovn_ls_ct_skip_dst_lport_ips: true
+
+# enable ecmp
+kube_ovn_enable_ecmp: false
+
+# enable metrics
+kube_ovn_enable_metrics: true
+
+# enable tproxy
+kube_ovn_enable_tproxy: false
+
+# ovs vsctl concurrency
+kube_ovn_ovs_vsctl_concurrency: 100
+
+# enable sercure service
+kube_ovn_enable_secure_serving: false
+
+# ovn exchange link name with ovs bridge name
+kube_ovn_exchange_link_name: false
 
 ## keep vm ip
 kube_ovn_keep_vm_ip: true
 
 ## cni config priority, default: 01
-kube_ovn_cni_config_priority: '01'
+kube_ovn_cni_config_priority: "01"
+
+# nodelocaldns_ip
+nodelocaldns_ip: 169.254.25.10
+
+# ovs db connection timeout
+kube_ovn_ovsdb_connection_timeout: 3
+
+# ovs db inactivity probe timeout
+kube_ovn_ovsdb_inactivity_probe: 10
+
+# kube ovn gc interval
+kube_ovn_gc_interval: 360
+
+# kube ovn inspect interval
+kube_ovn_inspect_interval: 20

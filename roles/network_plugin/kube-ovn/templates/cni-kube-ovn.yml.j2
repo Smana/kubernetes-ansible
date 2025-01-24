@@ -18,173 +18,6 @@ metadata:
 data:
   enable-vpc-nat-gw: "true"
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kube-ovn-cni
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    rbac.authorization.k8s.io/system-only: "true"
-  name: system:kube-ovn-cni
-rules:
-  - apiGroups:
-      - "kubeovn.io"
-    resources:
-      - subnets
-      - vlans
-      - provider-networks
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - ""
-      - "kubeovn.io"
-    resources:
-      - ovn-eips
-      - ovn-eips/status
-      - nodes
-      - pods
-      - vlans
-    verbs:
-      - get
-      - list
-      - patch
-      - watch
-  - apiGroups:
-      - "kubeovn.io"
-    resources:
-      - ips
-    verbs:
-      - get
-      - update
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-      - patch
-      - update
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - authentication.k8s.io
-    resources:
-      - tokenreviews
-    verbs:
-      - create
-  - apiGroups:
-      - authorization.k8s.io
-    resources:
-      - subjectaccessreviews
-    verbs:
-      - create
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: kube-ovn-cni
-roleRef:
-  name: system:kube-ovn-cni
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-  - kind: ServiceAccount
-    name: kube-ovn-cni
-    namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kube-ovn-cni
-  namespace: kube-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: extension-apiserver-authentication-reader
-subjects:
-  - kind: ServiceAccount
-    name: kube-ovn-cni
-    namespace: kube-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: kube-ovn-app
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  annotations:
-    rbac.authorization.k8s.io/system-only: "true"
-  name: system:kube-ovn-app
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - pods
-      - nodes
-    verbs:
-      - get
-      - list
-  - apiGroups:
-      - apps
-    resources:
-      - daemonsets
-    verbs:
-      - get
-  - apiGroups:
-      - authentication.k8s.io
-    resources:
-      - tokenreviews
-    verbs:
-      - create
-  - apiGroups:
-      - authorization.k8s.io
-    resources:
-      - subjectaccessreviews
-    verbs:
-      - create
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: kube-ovn-app
-roleRef:
-  name: system:kube-ovn-app
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-  - kind: ServiceAccount
-    name: kube-ovn-app
-    namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kube-ovn-app
-  namespace: kube-system
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: extension-apiserver-authentication-reader
-subjects:
-  - kind: ServiceAccount
-    name: kube-ovn-app
-    namespace: kube-system
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -240,6 +73,9 @@ spec:
           imagePullPolicy: {{ k8s_image_pull_policy }}
           args:
           - /kube-ovn/start-controller.sh
+          - --default-ls={{ kube_ovn_default_subnet }}
+          - --cluster-router={{ kube_ovn_default_vpc }}
+          - --node-switch={{ kube_ovn_node_subnet }}
           - --default-cidr={{ kube_pods_subnet }}{% if enable_dual_stack_networks %},{{ kube_ovn_pool_cidr_ipv6 | default(kube_pods_subnet_ipv6) }}{% endif %}{{ '' }}
           - --default-gateway={% if kube_ovn_default_gateway is defined %}{{ kube_ovn_default_gateway }}{% endif %}{{ '' }}
           - --default-gateway-check={{ kube_ovn_default_gateway_check | string }}
@@ -249,28 +85,32 @@ spec:
           - --node-switch-cidr={{ kube_ovn_node_switch_cidr }}{% if enable_dual_stack_networks %},{{ kube_ovn_node_switch_cidr_ipv6 }}{% endif %}{{ '' }}
           - --service-cluster-ip-range={{ kube_service_addresses }}{% if enable_dual_stack_networks %},{{ kube_service_addresses_ipv6 }}{% endif %}{{ '' }}
           - --network-type={{ kube_ovn_network_type }}
-          - --default-interface-name={{ kube_ovn_default_interface_name | default('') }}
+          - --default-provider-name={{ kube_ovn_default_provider_name }}
+          - --default-interface-name={{ kube_ovn_default_vlan_interface_name }}
           - --default-vlan-id={{ kube_ovn_default_vlan_id }}
+          - --default-vlan-name={{ kube_ovn_default_vlan_name }}
           - --ls-dnat-mod-dl-dst={{ kube_ovn_ls_dnat_mod_dl_dst }}
+          - --default-exchange-link-name={{ kube_ovn_exchange_link_name }}
+          - --ls-ct-skip-dst-lport-ips={{ kube_ovn_ls_ct_skip_dst_lport_ips }}
           - --pod-nic-type={{ kube_ovn_pod_nic_type }}
           - --enable-lb={{ kube_ovn_enable_lb | string }}
           - --enable-np={{ kube_ovn_enable_np | string }}
           - --enable-eip-snat={{ kube_ovn_eip_snat_enabled }}
           - --enable-external-vpc={{ kube_ovn_enable_external_vpc | string }}
+          - --enable-ecmp={{ kube_ovn_enable_ecmp }}
           - --logtostderr=false
           - --alsologtostderr=true
-          - --gc-interval=360
-          - --inspect-interval=20
+          - --gc-interval={{ kube_ovn_gc_interval }}
+          - --inspect-interval={{ kube_ovn_inspect_interval }}
           - --log_file=/var/log/kube-ovn/kube-ovn-controller.log
           - --log_file_max_size=0
           - --enable-lb-svc=false
           - --keep-vm-ip={{ kube_ovn_keep_vm_ip }}
-          securityContext:
-            runAsUser: 0
-            privileged: false
-            capabilities:
-              add:
-                - NET_BIND_SERVICE
+          - --enable-metrics={{ kube_ovn_enable_metrics }}
+          - --node-local-dns-ip={{ nodelocaldns_ip }}
+          - --secure-serving={{ kube_ovn_enable_secure_serving }}
+          - --ovsdb-con-timeout={{ kube_ovn_ovsdb_connection_timeout }}
+          - --ovsdb-inactivity-timeout={{ kube_ovn_ovsdb_inactivity_probe }}
           env:
             - name: ENABLE_SSL
               value: "{{ kube_ovn_enable_ssl | lower }}"
@@ -312,7 +152,7 @@ spec:
               command:
                 - /kube-ovn/kube-ovn-healthcheck
                 - --port=10660
-                - --tls=false
+                - --tls={{ kube_ovn_enable_secure_serving | lower }}
             periodSeconds: 3
             timeoutSeconds: 45
           livenessProbe:
@@ -320,7 +160,7 @@ spec:
               command:
                 - /kube-ovn/kube-ovn-healthcheck
                 - --port=10660
-                - --tls=false
+                - --tls={{ kube_ovn_enable_secure_serving | lower }}
             initialDelaySeconds: 300
             periodSeconds: 7
             failureThreshold: 5
@@ -403,6 +243,8 @@ spec:
         args:
           - --enable-mirror={{ kube_ovn_traffic_mirror | lower }}
           - --encap-checksum={{ kube_ovn_encap_checksum | lower }}
+          - --mirror-iface={{ kube_ovn_mirror_iface }}
+          - --node-switch={{ kube_ovn_node_subnet }}
           - --service-cluster-ip-range={{ kube_service_addresses }}{% if enable_dual_stack_networks %},{{ kube_service_addresses_ipv6 }}{% endif %}{{ '' }}
           - --iface={{ kube_ovn_iface | default('') }}
           - --dpdk-tunnel-iface={{ kube_ovn_dpdk_tunnel_iface }}
@@ -416,6 +258,10 @@ spec:
           - --alsologtostderr=true
           - --log_file=/var/log/kube-ovn/kube-ovn-cni.log
           - --log_file_max_size=0
+          - --enable-metrics={{ kube_ovn_enable_metrics }}
+          - --enable-tproxy={{ kube_ovn_enable_tproxy }}
+          - --ovs-vsctl-concurrency={{ kube_ovn_ovs_vsctl_concurrency }}
+          - --secure-serving={{ kube_ovn_enable_secure_serving }}
         securityContext:
           runAsUser: 0
           privileged: false
@@ -436,6 +282,14 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
           - name: MODULES
             value: kube_ovn_fastpath.ko
           - name: RPMS
@@ -490,7 +344,7 @@ spec:
             command:
               - /kube-ovn/kube-ovn-healthcheck
               - --port=10665
-              - --tls=false
+              - --tls={{ kube_ovn_enable_secure_serving | lower}}
           timeoutSeconds: 5
         readinessProbe:
           failureThreshold: 3
@@ -500,7 +354,7 @@ spec:
             command:
               - /kube-ovn/kube-ovn-healthcheck
               - --port=10665
-              - --tls=false
+              - --tls={{ kube_ovn_enable_secure_serving | lower}}
           timeoutSeconds: 5
         resources:
           requests:
@@ -580,7 +434,7 @@ spec:
         type: infra
     spec:
       priorityClassName: system-node-critical
-      serviceAccountName: ovn
+      serviceAccountName: kube-ovn-app
       hostPID: true
       containers:
         - name: pinger
@@ -618,10 +472,18 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           volumeMounts:
+            - mountPath: /lib/modules
+              name: host-modules
+              readOnly: true
+            - mountPath: /run/openvswitch
+              name: host-run-ovs
             - mountPath: /var/run/openvswitch
               name: host-run-ovs
             - mountPath: /var/run/ovn
               name: host-run-ovn
+            - mountPath: /sys
+              name: host-sys
+              readOnly: true
             - mountPath: /etc/openvswitch
               name: host-config-openvswitch
             - mountPath: /var/log/openvswitch
@@ -629,7 +491,6 @@ spec:
               readOnly: true
             - mountPath: /var/log/ovn
               name: host-log-ovn
-              readOnly: true
             - mountPath: /var/log/kube-ovn
               name: kube-ovn-log
             - mountPath: /etc/localtime
@@ -647,12 +508,18 @@ spec:
       nodeSelector:
         kubernetes.io/os: "linux"
       volumes:
+        - name: host-modules
+          hostPath:
+            path: /lib/modules
         - name: host-run-ovs
           hostPath:
             path: /run/openvswitch
         - name: host-run-ovn
           hostPath:
             path: /run/ovn
+        - name: host-sys
+          hostPath:
+            path: /sys
         - name: host-config-openvswitch
           hostPath:
             path: /etc/origin/openvswitch
@@ -711,7 +578,7 @@ spec:
                   app: kube-ovn-monitor
               topologyKey: kubernetes.io/hostname
       priorityClassName: system-cluster-critical
-      serviceAccountName: ovn
+      serviceAccountName: kube-ovn-app
       hostNetwork: true
       containers:
         - name: kube-ovn-monitor
@@ -760,6 +627,8 @@ spec:
               name: host-config-openvswitch
             - mountPath: /etc/ovn
               name: host-config-ovn
+            - mountPath: /var/log/openvswitch
+              name: host-log-ovs
             - mountPath: /var/log/ovn
               name: host-log-ovn
               readOnly: true
@@ -779,7 +648,7 @@ spec:
               command:
                 - /kube-ovn/kube-ovn-healthcheck
                 - --port=10661
-                - --tls=false
+                - --tls={{ kube_ovn_enable_secure_serving | lower}}
             timeoutSeconds: 5
           readinessProbe:
             failureThreshold: 3
@@ -790,7 +659,7 @@ spec:
               command:
                 - /kube-ovn/kube-ovn-healthcheck
                 - --port=10661
-                - --tls=false
+                - --tls={{ kube_ovn_enable_secure_serving | lower}}
             timeoutSeconds: 5
       nodeSelector:
         kubernetes.io/os: "linux"
@@ -910,3 +779,402 @@ data:
   gw-nodes: "{{ kube_ovn_central_hosts | join(',') }}"
   auto-route: "{{ kube_ovn_ic_autoroute | lower }}"
 {% endif %}
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ovn-nb
+  namespace: kube-system
+spec:
+  ports:
+    - name: ovn-nb
+      protocol: TCP
+      port: 6641
+      targetPort: 6641
+  type: ClusterIP
+{% if enable_dual_stack_networks %}
+  ipFamilyPolicy: PreferDualStack
+{% endif %}
+  selector:
+    app: ovn-central
+    ovn-nb-leader: "true"
+  sessionAffinity: None
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ovn-sb
+  namespace: kube-system
+spec:
+  ports:
+    - name: ovn-sb
+      protocol: TCP
+      port: 6642
+      targetPort: 6642
+  type: ClusterIP
+{% if enable_dual_stack_networks %}
+  ipFamilyPolicy: PreferDualStack
+{% endif %}
+  selector:
+    app: ovn-central
+    ovn-sb-leader: "true"
+  sessionAffinity: None
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ovn-northd
+  namespace: kube-system
+spec:
+  ports:
+    - name: ovn-northd
+      protocol: TCP
+      port: 6643
+      targetPort: 6643
+  type: ClusterIP
+{% if enable_dual_stack_networks %}
+  ipFamilyPolicy: PreferDualStack
+{% endif %}
+  selector:
+    app: ovn-central
+    ovn-northd-leader: "true"
+  sessionAffinity: None
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ovn-central
+  namespace: kube-system
+  annotations:
+    kubernetes.io/description: |
+      OVN components: northd, nb and sb.
+spec:
+  replicas: {{ kube_ovn_central_replics }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: ovn-central
+  template:
+    metadata:
+      labels:
+        app: ovn-central
+        component: network
+        type: infra
+    spec:
+      tolerations:
+      - operator: Exists
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: ovn-central
+              topologyKey: kubernetes.io/hostname
+      priorityClassName: system-cluster-critical
+      serviceAccountName: ovn-ovs
+      hostNetwork: true
+      containers:
+        - name: ovn-central
+          image: {{ kube_ovn_container_image_repo }}:{{ kube_ovn_container_image_tag }}
+          imagePullPolicy: {{ k8s_image_pull_policy }}
+          command: ["/kube-ovn/start-db.sh"]
+          securityContext:
+            capabilities:
+              add: ["SYS_NICE"]
+          env:
+            - name: ENABLE_SSL
+              value: "{{ kube_ovn_enable_ssl | lower }}"
+            - name: NODE_IPS
+              value: "{{ kube_ovn_central_ips }}"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IPS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIPs
+            - name: PROBE_INTERVAL
+              value: "{{ kube_ovn_probe_interval }}"
+            - name: OVN_NORTHD_PROBE_INTERVAL
+              value: "{{ kube_ovn_northd_probe_interval }}"
+            - name: OVN_LEADER_PROBE_INTERVAL
+              value: "{{ kube_ovn_leader_probe_interval }}"
+            - name: OVN_NORTHD_N_THREADS
+              value: "{{ kube_ovn_northd_n_threads }}"
+            - name: ENABLE_COMPACT
+              value: "{{ kube_ovn_enable_compact }}"
+            - name: ENABLE_BIND_LOCAL_IP
+              value: "{{ kube_ovn_bind_local_ip_enabled }}"
+          resources:
+            requests:
+              cpu: {{ kube_ovn_db_cpu_request }}
+              memory: {{ kube_ovn_db_memory_request }}
+            limits:
+              cpu: {{ kube_ovn_db_cpu_limit }}
+              memory: {{ kube_ovn_db_memory_limit }}
+          volumeMounts:
+            - mountPath: /var/run/openvswitch
+              name: host-run-ovs
+            - mountPath: /var/run/ovn
+              name: host-run-ovn
+            - mountPath: /sys
+              name: host-sys
+              readOnly: true
+            - mountPath: /etc/openvswitch
+              name: host-config-openvswitch
+            - mountPath: /etc/ovn
+              name: host-config-ovn
+            - mountPath: /var/log/openvswitch
+              name: host-log-ovs
+            - mountPath: /var/log/ovn
+              name: host-log-ovn
+            - mountPath: /etc/localtime
+              name: localtime
+            - mountPath: /var/run/tls
+              name: kube-ovn-tls
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - /kube-ovn/ovn-healthcheck.sh
+            periodSeconds: 15
+            timeoutSeconds: 45
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - /kube-ovn/ovn-healthcheck.sh
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 5
+            timeoutSeconds: 45
+      nodeSelector:
+        kubernetes.io/os: "linux"
+        kube-ovn/role: "master"
+      volumes:
+        - name: host-run-ovs
+          hostPath:
+            path: /run/openvswitch
+        - name: host-run-ovn
+          hostPath:
+            path: /run/ovn
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: host-config-openvswitch
+          hostPath:
+            path: /etc/origin/openvswitch
+        - name: host-config-ovn
+          hostPath:
+            path: /etc/origin/ovn
+        - name: host-log-ovs
+          hostPath:
+            path: /var/log/openvswitch
+        - name: host-log-ovn
+          hostPath:
+            path: /var/log/ovn
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: kube-ovn-tls
+          secret:
+            optional: true
+            secretName: kube-ovn-tls
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: ovs-ovn
+  namespace: kube-system
+  annotations:
+    kubernetes.io/description: |
+      This daemon set launches the openvswitch daemon.
+spec:
+  selector:
+    matchLabels:
+      app: ovs
+  updateStrategy:
+    type: OnDelete
+  template:
+    metadata:
+      labels:
+        app: ovs
+        component: network
+        type: infra
+    spec:
+      tolerations:
+      - operator: Exists
+      priorityClassName: system-node-critical
+      serviceAccountName: ovn-ovs
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: openvswitch
+          image: {% if kube_ovn_dpdk_enabled %}{{ kube_ovn_dpdk_container_image_repo }}:{{ kube_ovn_dpdk_container_image_tag }}{% else %}{{ kube_ovn_container_image_repo }}:{{ kube_ovn_container_image_tag }}{% endif %}
+
+          imagePullPolicy: {{ k8s_image_pull_policy }}
+          command: [{% if kube_ovn_dpdk_enabled %}"/kube-ovn/start-ovs-dpdk.sh"{% else %}"/kube-ovn/start-ovs.sh"{% endif %}]
+          securityContext:
+            runAsUser: 0
+            privileged: true
+          env:
+            - name: ENABLE_SSL
+              value: "{{ kube_ovn_enable_ssl | lower }}"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+{% if not kube_ovn_dpdk_enabled %}
+            - name: HW_OFFLOAD
+              value: "{{ kube_ovn_hw_offload | string | lower }}"
+            - name: TUNNEL_TYPE
+              value: "{{ kube_ovn_tunnel_type }}"
+{% endif %}
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: OVN_DB_IPS
+              value: "{{ kube_ovn_central_ips }}"
+            - name: OVN_REMOTE_PROBE_INTERVAL
+              value: "{{ kube_ovn_remote_probe_interval }}"
+            - name: OVN_REMOTE_OPENFLOW_INTERVAL
+              value: "{{ kube_ovn_remote_openflow_interval }}"
+          volumeMounts:
+            - mountPath: /var/run/netns
+              name: host-ns
+              mountPropagation: HostToContainer
+            - mountPath: /lib/modules
+              name: host-modules
+              readOnly: true
+            - mountPath: /var/run/openvswitch
+              name: host-run-ovs
+            - mountPath: /var/run/ovn
+              name: host-run-ovn
+            - mountPath: /sys
+              name: host-sys
+              readOnly: true
+            - mountPath: /etc/cni/net.d
+              name: cni-conf
+            - mountPath: /etc/openvswitch
+              name: host-config-openvswitch
+            - mountPath: /etc/ovn
+              name: host-config-ovn
+            - mountPath: /var/log/openvswitch
+              name: host-log-ovs
+            - mountPath: /var/log/ovn
+              name: host-log-ovn
+{% if kube_ovn_dpdk_enabled %}
+            - mountPath: /opt/ovs-config
+              name: host-config-ovs
+            - mountPath: /dev/hugepages
+              name: hugepage
+{% endif %}
+            - mountPath: /etc/localtime
+              name: localtime
+            - mountPath: /var/run/tls
+              name: kube-ovn-tls
+          readinessProbe:
+            exec:
+              command:
+                - bash
+{% if kube_ovn_dpdk_enabled %}
+                - /kube-ovn/ovs-dpdk-healthcheck.sh
+{% else %}
+                - /kube-ovn/ovs-healthcheck.sh
+{% endif %}
+            periodSeconds: 5
+            timeoutSeconds: 45
+          livenessProbe:
+            exec:
+              command:
+                - bash
+{% if kube_ovn_dpdk_enabled %}
+                - /kube-ovn/ovs-dpdk-healthcheck.sh
+{% else %}
+                - /kube-ovn/ovs-healthcheck.sh
+{% endif %}
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 5
+            timeoutSeconds: 45
+          resources:
+{% if kube_ovn_dpdk_enabled %}
+            requests:
+              cpu: {{ kube_ovn_dpdk_node_cpu_request }}
+              memory: {{ kube_ovn_dpdk_node_memory_request }}
+            limits:
+              cpu: {{ kube_ovn_dpdk_node_cpu_limit }}
+              memory: {{ kube_ovn_dpdk_node_memory_limit }}
+              hugepages-1Gi: 1Gi
+{% else %}
+            requests:
+              cpu: {{ kube_ovn_node_cpu_request }}
+              memory: {{ kube_ovn_node_memory_request }}
+            limits:
+              cpu: {{ kube_ovn_node_cpu_limit }}
+              memory: {{ kube_ovn_node_memory_limit }}
+{% endif %}
+      nodeSelector:
+        kubernetes.io/os: "linux"
+      volumes:
+        - name: host-modules
+          hostPath:
+            path: /lib/modules
+        - name: host-run-ovs
+          hostPath:
+            path: /run/openvswitch
+        - name: host-run-ovn
+          hostPath:
+            path: /run/ovn
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: host-ns
+          hostPath:
+            path: /var/run/netns
+        - name: cni-conf
+          hostPath:
+            path: /etc/cni/net.d
+        - name: host-config-openvswitch
+          hostPath:
+            path: /etc/origin/openvswitch
+        - name: host-config-ovn
+          hostPath:
+            path: /etc/origin/ovn
+        - name: host-log-ovs
+          hostPath:
+            path: /var/log/openvswitch
+        - name: host-log-ovn
+          hostPath:
+            path: /var/log/ovn
+{% if kube_ovn_dpdk_enabled %}
+        - name: host-config-ovs
+          hostPath:
+            path: /opt/ovs-config
+            type: DirectoryOrCreate
+        - name: hugepage
+          emptyDir:
+            medium: HugePages
+{% endif %}
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: kube-ovn-tls
+          secret:
+            optional: true
+            secretName: kube-ovn-tls
