@@ -7,7 +7,7 @@ bootstrapTokens:
   ttl: "24h"
 {% endif %}
 localAPIEndpoint:
-  advertiseAddress: {{ kube_apiserver_address }}
+  advertiseAddress: "{{ kube_apiserver_address }}"
   bindPort: {{ kube_apiserver_port }}
 {% if kubeadm_certificate_key is defined %}
 certificateKey: {{ kubeadm_certificate_key }}
@@ -108,7 +108,7 @@ kubernetesVersion: {{ kube_version }}
 {% if kubeadm_config_api_fqdn is defined %}
 controlPlaneEndpoint: {{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port | default(kube_apiserver_port) }}
 {% else %}
-controlPlaneEndpoint: {{ ip | default(fallback_ip) }}:{{ kube_apiserver_port }}
+controlPlaneEndpoint: "{{ ip | ansible.utils.ipwrap | default(fallback_ips[inventory_hostname]) }}:{{ kube_apiserver_port }}"
 {% endif %}
 certificatesDir: {{ kube_cert_dir }}
 imageRepository: {{ kube_image_repo }}
@@ -131,7 +131,7 @@ apiServer:
 {% else %}
     authorization-mode: {{ authorization_modes | join(',') }}
 {% endif %}
-    bind-address: {{ kube_apiserver_bind_address }}
+    bind-address: "{{ kube_apiserver_bind_address }}"
 {% if kube_apiserver_enable_admission_plugins | length > 0 %}
     enable-admission-plugins: {{ kube_apiserver_enable_admission_plugins | join(',') }}
 {% endif %}
@@ -317,7 +317,7 @@ controllerManager:
 {% endif %}
     profiling: "{{ kube_profiling }}"
     terminated-pod-gc-threshold: "{{ kube_controller_terminated_pod_gc_threshold }}"
-    bind-address: {{ kube_controller_manager_bind_address }}
+    bind-address: "{{ kube_controller_manager_bind_address }}"
     leader-elect-lease-duration: {{ kube_controller_manager_leader_elect_lease_duration }}
     leader-elect-renew-deadline: {{ kube_controller_manager_leader_elect_renew_deadline }}
 {% if kube_controller_feature_gates or kube_feature_gates %}
@@ -350,7 +350,7 @@ controllerManager:
 {% endif %}
 scheduler:
   extraArgs:
-    bind-address: {{ kube_scheduler_bind_address }}
+    bind-address: "{{ kube_scheduler_bind_address }}"
     config: {{ kube_config_dir }}/kubescheduler-config.yaml
 {% if kube_scheduler_feature_gates or kube_feature_gates %}
     feature-gates: "{{ kube_scheduler_feature_gates | default(kube_feature_gates, true) | join(',') }}"
@@ -384,7 +384,7 @@ scheduler:
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
-bindAddress: {{ kube_proxy_bind_address }}
+bindAddress: "{{ kube_proxy_bind_address }}"
 clientConnection:
   acceptContentTypes: {{ kube_proxy_client_accept_content_types }}
   burst: {{ kube_proxy_client_burst }}
