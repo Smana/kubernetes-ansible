@@ -79,12 +79,12 @@ repos:
         additional_dependencies:
           - jinja2
 
-      - id: render-readme-versions
-        name: Update versions in README.md to match their defaults values
+      - id: propagate-ansible-variables
+        name: Update static files referencing default kubespray values
         language: python
         additional_dependencies:
           - ansible-core>=2.16.4
-        entry: scripts/render_readme_version.yml
+        entry: scripts/propagate_ansible_variables.yml
         pass_filenames: false
 
       - id: check-checksums-sorted
