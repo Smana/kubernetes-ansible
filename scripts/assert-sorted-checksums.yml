@@ -13,6 +13,13 @@
   roles:
   - kubespray-defaults
   tasks:
+  - name: Check all versions are strings
+    assert:
+      that: "{{ item.1.value | reject('string') == [] }}"
+      quiet: true
+    loop: "{{ _minimal_data_needed }}"
+    loop_control:
+      label: "{{ item.0 }}:{{ item.1.key }}"
   - name: Check all checksums are sorted by version
     vars:
       actual: "{{ item.1.value.keys() | map('string') | reverse}}"
