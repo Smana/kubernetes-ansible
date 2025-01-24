@@ -652,17 +652,17 @@ etcd_events_peer_url: "https://{{ etcd_events_access_address }}:2382"
 etcd_events_client_url: "https://{{ etcd_events_access_address }}:2383"
 etcd_access_addresses: |-
   {% for item in etcd_hosts -%}
-    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip'])) }}:2379{% if not loop.last %},{% endif %}
+    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip']))) }}:2379{% if not loop.last %},{% endif %}
   {%- endfor %}
 etcd_events_access_addresses_list: |-
   [
   {% for item in etcd_hosts -%}
-    'https://{{ hostvars[item]['etcd_events_access_address'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip'])) }}:2383'{% if not loop.last %},{% endif %}
+    'https://{{ hostvars[item]['etcd_events_access_address'] | default(hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip']))) }}:2383'{% if not loop.last %},{% endif %}
   {%- endfor %}
   ]
 etcd_metrics_addresses: |-
   {% for item in etcd_hosts -%}
-    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip'])) }}:{{ etcd_metrics_port | default(2381) }}{% if not loop.last %},{% endif %}
+    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip']))) }}:{{ etcd_metrics_port | default(2381) }}{% if not loop.last %},{% endif %}
   {%- endfor %}
 etcd_events_access_addresses: "{{ etcd_events_access_addresses_list | join(',') }}"
 etcd_events_access_addresses_semicolon: "{{ etcd_events_access_addresses_list | join(';') }}"
@@ -673,11 +673,11 @@ etcd_member_name: |-
   {% endfor %}
 etcd_peer_addresses: |-
   {% for item in groups['etcd'] -%}
-    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}=https://{{ hostvars[item].etcd_access_address | default(hostvars[item].ip | default(hostvars[item]['fallback_ip'])) }}:2380{% if not loop.last %},{% endif %}
+    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}=https://{{ hostvars[item].etcd_access_address | default(hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item]['fallback_ip']))) }}:2380{% if not loop.last %},{% endif %}
   {%- endfor %}
 etcd_events_peer_addresses: |-
   {% for item in groups['etcd'] -%}
-    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}-events=https://{{ hostvars[item].etcd_events_access_address | default(hostvars[item].ip | default(hostvars[item]['fallback_ip'])) }}:2382{% if not loop.last %},{% endif %}
+    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}-events=https://{{ hostvars[item].etcd_events_access_address | default(hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item]['fallback_ip']))) }}:2382{% if not loop.last %},{% endif %}
   {%- endfor %}
 
 etcd_heartbeat_interval: "250"

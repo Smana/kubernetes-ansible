@@ -19,7 +19,7 @@
     etcd_events_peer_addresses: >-
       {% for host in groups['etcd'] -%}
         {%- if hostvars[host]['etcd_events_member_in_cluster'].rc == 0 -%}
-          {{ "etcd" + loop.index | string }}=https://{{ hostvars[host].etcd_events_access_address | default(hostvars[host].ip | default(hostvars[host]['fallback_ip'])) }}:2382,
+          {{ "etcd" + loop.index | string }}=https://{{ hostvars[host].etcd_events_access_address | default(hostvars[host].access_ip | default(hostvars[host].ip | default(hostvars[host]['fallback_ip']))) }}:2382,
         {%- endif -%}
         {%- if loop.last -%}
           {{ etcd_member_name }}={{ etcd_events_peer_url }}
