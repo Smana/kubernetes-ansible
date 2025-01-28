@@ -1,0 +1,10 @@
+---
+# node_taints:
+# - key: example.com/some_key
+#   value: some_value
+#   effect: NoSchedule
+# - key: example.com/other_key
+#   effect: NoExecute
+# The structure is identical to the kubernetes API object
+# https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#nodespec-v1-core (taints field)
+node_taints: []

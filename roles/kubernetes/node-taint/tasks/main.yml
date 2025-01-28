@@ -1,35 +1,29 @@
 ---
-- name: Set role and inventory node taint to empty list
-  set_fact:
-    role_node_taints: []
-    inventory_node_taints: []
-
-- name: Node taint for nvidia GPU nodes
-  set_fact:
-    role_node_taints: "{{ role_node_taints + ['nvidia.com/gpu=:NoSchedule'] }}"
-  when:
-    - nvidia_gpu_nodes is defined
-    - nvidia_accelerator_enabled | bool
-    - inventory_hostname in nvidia_gpu_nodes
-
-- name: Populate inventory node taint
-  set_fact:
-    inventory_node_taints: "{{ inventory_node_taints + ['%s' | format(item)] }}"
-  loop: "{{ node_taints | d([]) }}"
-  when:
-    - node_taints is defined
-    - node_taints is not string
-    - node_taints is not mapping
-    - node_taints is iterable
-- debug:  # noqa name[missing]
-    var: role_node_taints
-- debug:  # noqa name[missing]
-    var: inventory_node_taints
-
-- name: Set taint to node
-  command: >-
-      {{ kubectl }} taint node {{ kube_override_hostname | default(inventory_hostname) }} {{ (role_node_taints + inventory_node_taints) | join(' ') }} --overwrite=true
+- name: Get current node taints
+  command: "{{ kubectl }} get node {{ kube_override_hostname }} -o jsonpath-as-json={.spec.taints[]}"
+  register: current_taints
   delegate_to: "{{ groups['kube_control_plane'][0] }}"
-  changed_when: false
-  when:
-    - (role_node_taints + inventory_node_taints) | length > 0
+
+- name: Set node taints
+  command: "{{ kubectl }} patch node {{ kube_override_hostname }} --type json -p '{{ patch | to_json }}'"
+  register: patch_cmd_result
+  changed_when: patch_cmd_result.stdout == "patched"
+  # https://github.com/kubernetes/kubernetes/blob/2691a29eacb6cc0d115eb773fb86825b9929f63d/staging/src/k8s.io/kubectl/pkg/cmd/patch/patch.go#L353-L358
+  vars:
+    patch:
+    - op: replace
+      path: /spec/taints
+      value: "{{ _node_taints + reserved_taints }}"
+    # Preserve kubernetes reserved taints only
+    reserved_taints: "{{ current_taints.stdout | from_json | selectattr('key', 'match', '([-a-z0-9]+.)*(kubernetes|k8s)\\.io/.*') }}"
+    # Compatibility layer for taints as string (instead of {key: "", value:, effect} dict)
+    # TODO: remove after release 2.27.0
+    _node_taints: "{{ _parsed_taints if ((node_taints | select('string')) != []) else node_taints }}"
+    _parsed_taints: "{{ node_taints
+        | map('ansible.builtin.regex_search',
+                  '(([-a-z09.]+/)?[-0-9a-z._]+)=([-a-z0-9._]+)?:(NoSchedule|PreferNoSchedule|NoExecute)',
+                  '\\1', '\\3', '\\4')
+        | map('zip', ['key', 'value', 'effect'])
+        | map('map', 'reverse')
+        | map('community.general.dict') }}"
+  delegate_to: "{{ groups['kube_control_plane'][0] }}"
