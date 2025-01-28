@@ -1,0 +1,61 @@
+name: Dependency check version
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # Every Monday at 03:00 AM UTC
+  workflow_dispatch:
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: '**/dependency_requirements.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/dependency_requirements.txt
+
+      - name: Run version check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/dependency_updater.py --ci-check
+
+      - name: Trigger subsequent action for each component
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version_diff=$(cat version_diff.json)
+          count=0  # Initialize a counter
+          for row in $(echo "${version_diff}" | jq -r 'to_entries[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+
+            component=$(_jq '.key')
+            current_version=$(_jq '.value.current_version')
+            processed_latest_version=$(_jq '.value.processed_latest_version')
+
+            echo "Triggering update for $component from $current_version to $processed_latest_version"
+
+            gh workflow run dependency-pull-request.yml \
+              -f component=$component \
+              -f current_version=$current_version \
+              -f latest_version=$processed_latest_version \
+
+            count=$((count + 1))
+
+            # Stop after triggering 30 actions
+            if [ "$count" -ge 30 ]; then
+              echo "Reached the limit of 30 triggered actions."
+              break
+            fi
+          done

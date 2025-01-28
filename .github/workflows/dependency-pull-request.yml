@@ -1,0 +1,71 @@
+name: Dependency create bump PR
+run-name: Create bump PR for ${{ inputs.component }} from ${{ inputs.current_version }} to ${{ inputs.latest_version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: "Component to update"
+        required: true
+      current_version:
+        description: "Current version of the component"
+        required: true
+      latest_version:
+        description: "Latest version of the component"
+        required: true
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: '**/dependency_requirements.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/dependency_requirements.txt
+
+      - name: Run version check to create version_diff.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/dependency_updater.py --ci-check --component ${{ github.event.inputs.component }}
+
+      - name: Update component versions and checksums
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/dependency_updater.py --component ${{ github.event.inputs.component }}
+
+      - name: Generate PR body
+        id: generate_pr_body
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pr_body=$(python scripts/generate_pr_body.py --component ${{ github.event.inputs.component }})
+
+          # Escape any special characters (e.g., newlines) for the GITHUB_OUTPUT
+          echo "pr_body<<EOF" >> $GITHUB_OUTPUT
+          echo "$pr_body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Cleanup cache and version_diff.json
+        run: rm -r cache/ version_diff.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: "update-dependency-${{ github.event.inputs.component }}"
+          commit-message: "Bump ${{ github.event.inputs.component }} from ${{ github.event.inputs.current_version }} to ${{ github.event.inputs.latest_version }}"
+          title: "Bump ${{ github.event.inputs.component }} from ${{ github.event.inputs.current_version }} to ${{ github.event.inputs.latest_version }}"
+          body: ${{ steps.generate_pr_body.outputs.pr_body }}
+          labels: |
+            dependencies
+            release-note-none
