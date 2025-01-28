@@ -1,4 +1,9 @@
 ---
+- name: Gateway API | Download YAML
+  include_tasks: "../../../download/tasks/download_file.yml"
+  vars:
+    download: "{{ download_defaults | combine(downloads.gateway_api) }}"
+
 - name: Gateway API | Create addon dir
   file:
     path: "{{ kube_config_dir }}/addons/gateway_api"
@@ -9,17 +14,12 @@
   when:
     - inventory_hostname == groups['kube_control_plane'][0]
 
-- name: Gateway API | Set channel
-  set_fact:
-    gateway_api_channel: "{{ 'experimental' if gateway_api_experimental_channel else 'standard' }}"
-  when:
-    - "inventory_hostname == groups['kube_control_plane'][0]"
-
-- name: Gateway API | Copy Gateway API manifests to remote
-  template:
-    src: "{{ gateway_api_channel }}-install.yaml.j2"
+- name: Gateway API | Copy YAML from download dir
+  copy:
+    src: "{{ local_release_dir }}/gateway-api-{{ gateway_api_channel }}-install.yaml"
     dest: "{{ kube_config_dir }}/addons/gateway_api/{{ gateway_api_channel }}-install.yaml"
     mode: "0644"
+    remote_src: true
   when:
     - "inventory_hostname == groups['kube_control_plane'][0]"
 
