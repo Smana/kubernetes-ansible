@@ -123,7 +123,7 @@ kube_ovn_dpdk_version: "19.11-{{ kube_ovn_version }}"
 kube_router_version: "v2.0.0"
 multus_version: "v4.1.0"
 helm_version: "v3.16.4"
-nerdctl_version: "1.7.7"
+nerdctl_version: "2.0.3"
 skopeo_version: "v1.16.1"
 
 # Get kubernetes major version (i.e. 1.17.4 => 1.17)
