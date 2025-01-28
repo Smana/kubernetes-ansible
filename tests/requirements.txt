@@ -1,6 +1,6 @@
 -r ../requirements.txt
 distlib==0.3.9 # required for building collections
-molecule==24.12.0
-molecule-plugins[vagrant]==23.6.0
+molecule==25.1.0
+molecule-plugins[vagrant]==23.7.0
 pytest-testinfra==10.1.1
 python-vagrant==1.0.0
