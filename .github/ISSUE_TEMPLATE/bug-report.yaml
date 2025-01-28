@@ -36,11 +36,35 @@ body:
     attributes:
       value: '### Environment'
 
-  - type: textarea
+  - type: dropdown
     id: os
     attributes:
       label: OS
-      placeholder: 'printf "$(uname -srm)\n$(cat /etc/os-release)\n"'
+      options:
+        - 'RHEL 9'
+        - 'RHEL 8'
+        - 'Fedora 40'
+        - 'Ubuntu 24'
+        - 'Ubuntu 22'
+        - 'Ubuntu 20'
+        - 'Debian 12'
+        - 'Debian 11'
+        - 'Flatcar Container Linux'
+        - 'openSUSE Leap'
+        - 'openSUSE Tumbleweed'
+        - 'Oracle Linux 9'
+        - 'Oracle Linux 8'
+        - 'AlmaLinux 9'
+        - 'AlmaLinux 8'
+        - 'Rocky Linux 9'
+        - 'Rocky Linux 8'
+        - 'Amazon Linux 2'
+        - 'Kylin Linux Advanced Server V10'
+        - 'UOS Linux 20'
+        - 'openEuler 24'
+        - 'openEuler 22'
+        - 'openEuler 20'
+        - 'Other|Unsupported'
     validations:
       required: true
 
