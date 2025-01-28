@@ -282,9 +282,9 @@ external_openstack_cloud_controller_image_tag: "v1.31.1"
 kube_vip_image_repo: "{{ github_image_repo }}/kube-vip/kube-vip"
 kube_vip_image_tag: v0.8.0
 nginx_image_repo: "{{ docker_image_repo }}/library/nginx"
-nginx_image_tag: 1.25.2-alpine
+nginx_image_tag: 1.27.2-alpine
 haproxy_image_repo: "{{ docker_image_repo }}/library/haproxy"
-haproxy_image_tag: 2.8.2-alpine
+haproxy_image_tag: 3.1.2-alpine
 
 # Coredns version should be supported by corefile-migration (or at least work with)
 # bundle with kubeadm; if not 'basic' upgrade can sometimes fail
