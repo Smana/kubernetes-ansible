@@ -1,0 +1,11 @@
+---
+# Instance settings
+cloud_image: flatcar-4081
+mode: default
+vm_memory: 3072
+
+# Kubespray settings
+metrics_server_enabled: true
+dashboard_namespace: "kube-dashboard"
+dashboard_enabled: true
+loadbalancer_apiserver_type: haproxy
