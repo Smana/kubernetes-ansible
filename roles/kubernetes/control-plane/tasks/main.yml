@@ -25,7 +25,7 @@
     mode: "0640"
   vars:
     authz_config:
-      apiVersion: apiserver.config.k8s.io/{{ 'v1alpha1' if kube_version is version('v1.30.0', '<') else 'v1beta1' if kube_version is version('v1.32.0', '<') else 'v1' }}
+      apiVersion: apiserver.config.k8s.io/{{ 'v1alpha1' if kube_version is version('1.30.0', '<') else 'v1beta1' if kube_version is version('1.32.0', '<') else 'v1' }}
       kind: AuthorizationConfiguration
       authorizers: "{{ kube_apiserver_authorization_config_authorizers }}"
   when: kube_apiserver_use_authorization_config_file

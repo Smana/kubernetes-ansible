@@ -61,7 +61,7 @@
       dest: "{{ file_path_cached if download_force_cache else download.dest }}"
       owner: "{{ omit if download_localhost else (download.owner | default(omit)) }}"
       mode: "{{ omit if download_localhost else (download.mode | default(omit)) }}"
-      checksum: "{{ 'sha256:' + download.sha256 if download.sha256 else omit }}"
+      checksum: "{{ download.checksum }}"
       validate_certs: "{{ download_validate_certs }}"
       url_username: "{{ download.username | default(omit) }}"
       url_password: "{{ download.password | default(omit) }}"

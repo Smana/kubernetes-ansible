@@ -126,18 +126,18 @@
   block:
     - name: Calico | Check if extra directory is needed
       stat:
-        path: "{{ local_release_dir }}/calico-{{ calico_version }}-kdd-crds/{{ 'kdd' if (calico_version is version('v3.22.3', '<')) else 'crd' }}"
+        path: "{{ local_release_dir }}/calico-{{ calico_version }}-kdd-crds/{{ 'kdd' if (calico_version is version('3.22.3', '<')) else 'crd' }}"
       register: kdd_path
     - name: Calico | Set kdd path when calico < v3.22.3
       set_fact:
         calico_kdd_path: "{{ local_release_dir }}/calico-{{ calico_version }}-kdd-crds{{ '/kdd' if kdd_path.stat.exists is defined and kdd_path.stat.exists }}"
       when:
-        - calico_version is version('v3.22.3', '<')
-    - name: Calico | Set kdd path when calico > v3.22.2
+        - calico_version is version('3.22.3', '<')
+    - name: Calico | Set kdd path when calico > 3.22.2
       set_fact:
         calico_kdd_path: "{{ local_release_dir }}/calico-{{ calico_version }}-kdd-crds{{ '/crd' if kdd_path.stat.exists is defined and kdd_path.stat.exists }}"
       when:
-        - calico_version is version('v3.22.2', '>')
+        - calico_version is version('3.22.2', '>')
     - name: Calico | Create calico manifests for kdd
       assemble:
         src: "{{ calico_kdd_path }}"

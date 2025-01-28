@@ -106,13 +106,13 @@ spec:
         - {{ env_var | to_nice_yaml(indent=2) | indent(10) }}
 {% endfor %}
         lifecycle:
-{% if cilium_version | regex_replace('v') is version('1.14', '<') %}
+{% if cilium_version is version('1.14', '<') %}
           postStart:
             exec:
               command:
               - "/cni-install.sh"
               - "--cni-exclusive={{ cilium_cni_exclusive | string | lower }}"
-{% if cilium_version | regex_replace('v') is version('1.12', '>=') %}
+{% if cilium_version is version('1.12', '>=') %}
               - "--enable-debug={{ cilium_debug | string | lower }}"
               - "--log-file={{ cilium_cni_log_file }}"
 {% endif %}
@@ -151,7 +151,7 @@ spec:
           mountPropagation: Bidirectional
         - name: cilium-run
           mountPath: /var/run/cilium
-{% if cilium_version | regex_replace('v') is version('1.13.1', '<') %}
+{% if cilium_version is version('1.13.1', '<') %}
         - name: cni-path
           mountPath: /host/opt/cni/bin
 {% endif %}
@@ -201,7 +201,7 @@ spec:
 {% endif %}
       hostNetwork: true
       initContainers:
-{% if cilium_version | regex_replace('v') is version('1.11', '>=') and cilium_cgroup_auto_mount %}
+{% if cilium_version is version('1.11', '>=') and cilium_cgroup_auto_mount %}
       - name: mount-cgroup
         image: "{{ cilium_image_repo }}:{{ cilium_image_tag }}"
         imagePullPolicy: {{ k8s_image_pull_policy }}
@@ -230,7 +230,7 @@ spec:
         securityContext:
           privileged: true
 {% endif %}
-{% if cilium_version | regex_replace('v') is version('1.11.7', '>=') %}
+{% if cilium_version is version('1.11.7', '>=') %}
       - name: apply-sysctl-overwrites
         image: "{{ cilium_image_repo }}:{{ cilium_image_tag }}"
         imagePullPolicy: {{ k8s_image_pull_policy }}
@@ -277,7 +277,7 @@ spec:
               optional: true
 # Removed in 1.11 and up.
 # https://github.com/cilium/cilium/commit/f7a3f59fd74983c600bfce9cac364b76d20849d9
-{% if cilium_version | regex_replace('v') is version('1.11', '<') %}
+{% if cilium_version is version('1.11', '<') %}
         - name: CILIUM_WAIT_BPF_MOUNT
           valueFrom:
             configMapKeyRef:
@@ -296,7 +296,7 @@ spec:
         volumeMounts:
         - name: bpf-maps
           mountPath: /sys/fs/bpf
-{% if cilium_version | regex_replace('v') is version('1.11', '>=') %}
+{% if cilium_version is version('1.11', '>=') %}
           # Required to mount cgroup filesystem from the host to cilium agent pod
         - name: cilium-cgroup
           mountPath: {{ cilium_cgroup_host_root }}
@@ -308,7 +308,7 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
-{% if cilium_version | regex_replace('v') is version('1.13.1', '>=') %}
+{% if cilium_version is version('1.13.1', '>=') %}
       # Install the CNI binaries in an InitContainer so we don't have a writable host mount in the agent
       - name: install-cni-binaries
         image: "{{ cilium_image_repo }}:{{ cilium_image_tag }}"
@@ -356,7 +356,7 @@ spec:
         hostPath:
           path: /sys/fs/bpf
           type: DirectoryOrCreate
-{% if cilium_version | regex_replace('v') is version('1.11', '>=') %}
+{% if cilium_version is version('1.11', '>=') %}
       # To mount cgroup2 filesystem on the host
       - name: hostproc
         hostPath:

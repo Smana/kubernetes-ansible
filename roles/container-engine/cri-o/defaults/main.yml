@@ -37,7 +37,7 @@ crio_signature_policy: "{% if ansible_os_family == 'ClearLinux' %}/usr/share/def
 
 crio_stream_port: "10010"
 
-crio_required_version: "{{ kube_version | regex_replace('^v(?P<major>\\d+).(?P<minor>\\d+).(?P<patch>\\d+)$', '\\g<major>.\\g<minor>') }}"
+crio_required_version: "{{ kube_version | regex_replace('^(?P<major>\\d+).(?P<minor>\\d+).(?P<patch>\\d+)$', '\\g<major>.\\g<minor>') }}"
 
 crio_root: "/var/lib/containers/storage"
 

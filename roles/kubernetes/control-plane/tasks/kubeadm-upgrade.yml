@@ -13,7 +13,7 @@
   command: >-
     timeout -k 600s 600s
     {{ bin_dir }}/kubeadm
-    upgrade apply -y {{ kube_version }}
+    upgrade apply -y v{{ kube_version }}
     --certificate-renewal={{ kubeadm_upgrade_auto_cert_renewal }}
     --ignore-preflight-errors={{ kubeadm_ignore_preflight_errors | join(',') }}
     --allow-experimental-upgrades
@@ -34,7 +34,7 @@
   command: >-
     timeout -k 600s 600s
     {{ bin_dir }}/kubeadm
-    upgrade apply -y {{ kube_version }}
+    upgrade apply -y v{{ kube_version }}
     --certificate-renewal={{ kubeadm_upgrade_auto_cert_renewal }}
     --ignore-preflight-errors={{ kubeadm_ignore_preflight_errors | join(',') }}
     --allow-experimental-upgrades

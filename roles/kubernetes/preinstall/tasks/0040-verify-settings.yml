@@ -1,4 +1,49 @@
 ---
+- name: Stop if some versions have a 'v' left at the start
+  # TODO: drop this task after 2.28.0 is released
+  # The 'not defined' tests are exception for applications which version in not defined
+  # in kubespray-defaults, only in their own roles.
+  assert:
+    msg: |
+      All version string used in kubespray have been normalized to not use a leading 'v'.
+      This check will be dropped in the next minor release.
+    that:
+      - argocd_version is not defined or not argocd_version.startswith('v')
+      - not aws_ebs_csi_plugin_version.startswith('v')
+      - not azure_csi_plugin_version.startswith('v')
+      - not calico_version.startswith('v')
+      - not calico_apiserver_version.startswith('v')
+      - not calico_ctl_version.startswith('v')
+      - not calico_typha_version.startswith('v')
+      - not cephfs_provisioner_version.startswith('v')
+      - not cert_manager_version.startswith('v')
+      - not cilium_cli_version.startswith('v')
+      - not cilium_version.startswith('v')
+      - not cinder_csi_plugin_version.startswith('v')
+      - not cni_version.startswith('v')
+      - not dnsautoscaler_version.startswith('v')
+      - not etcd_version.startswith('v')
+      - not flannel_cni_version.startswith('v')
+      - not flannel_version.startswith('v')
+      - gateway_api_version is not defined or not gateway_api_version.startswith('v')
+      - not gcp_pd_csi_plugin_version.startswith('v')
+      - not helm_version.startswith('v')
+      - not kube_ovn_version.startswith('v')
+      - not kube_router_version.startswith('v')
+      - not kube_version.startswith('v')
+      - kube_vip_version is not defined or not kube_vip_version.startswith('v')
+      - not local_path_provisioner_version.startswith('v')
+      - not local_volume_provisioner_version.startswith('v')
+      - not metallb_version.startswith('v')
+      - not metrics_server_version.startswith('v')
+      - not multus_version.startswith('v')
+      - not netcheck_version.startswith('v')
+      - not pod_infra_version.startswith('v')
+      - not rbd_provisioner_version.startswith('v')
+      - not runc_version.startswith('v')
+      - not skopeo_version.startswith('v')
+      - not yq_version.startswith('v')
+
 - name: Stop if any host not in '--limit' does not have a fact cache
   vars:
     uncached_hosts: "{{ hostvars | dict2items | selectattr('value.ansible_default_ipv4', 'undefined') | map(attribute='key') }}"

@@ -1,6 +1,6 @@
 ---
 argocd_enabled: false
-argocd_version: v2.11.0
+argocd_version: 2.11.0
 argocd_namespace: argocd
 # argocd_admin_password:
-argocd_install_url: "https://raw.githubusercontent.com/argoproj/argo-cd/{{ argocd_version }}/manifests/install.yaml"
+argocd_install_url: "https://raw.githubusercontent.com/argoproj/argo-cd/v{{ argocd_version }}/manifests/install.yaml"

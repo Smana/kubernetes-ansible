@@ -65,7 +65,7 @@
     - name: Assert that current calico version is enough for upgrade
       assert:
         that:
-          - calico_version_on_server.stdout is version(calico_min_version_required, '>=')
+          - calico_version_on_server.stdout.removeprefix('v') is version(calico_min_version_required, '>=')
         msg: >
           Your version of calico is not fresh enough for upgrade.
           Minimum version is {{ calico_min_version_required }} supported by the previous kubespray release.

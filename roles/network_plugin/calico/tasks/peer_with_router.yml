@@ -97,10 +97,10 @@
         "asNumber": "{{ item.as }}",
         "node": "{{ inventory_hostname }}",
         "peerIP": "{{ item.router_id }}",
-        {% if calico_version is version('v3.26.0', '>=') and (item.filters | default([]) | length > 0) %}
+        {% if calico_version is version('3.26.0', '>=') and (item.filters | default([]) | length > 0) %}
         "filters": {{ item.filters }},
         {% endif %}
-        {% if calico_version is version('v3.23.0', '>=') and (item.numallowedlocalasnumbers | default(0) > 0) %}
+        {% if calico_version is version('3.23.0', '>=') and (item.numallowedlocalasnumbers | default(0) > 0) %}
         "numAllowedLocalASNumbers": {{ item.numallowedlocalasnumbers }},
         {% endif %}
         "sourceAddress": "{{ item.sourceaddress | default('UseNodeIP') }}"

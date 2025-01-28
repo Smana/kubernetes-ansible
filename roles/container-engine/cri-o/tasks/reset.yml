@@ -19,7 +19,7 @@
 
 - name: CRI-O | Remove cri-o apt repo
   apt_repository:
-    repo: "deb {{ crio_download_crio }}{{ crio_version }}/{{ crio_kubic_debian_repo_name }}/ /"
+    repo: "deb {{ crio_download_crio }}v{{ crio_version }}/{{ crio_kubic_debian_repo_name }}/ /"
     state: absent
     filename: devel-kubic-libcontainers-stable-cri-o
   when: crio_kubic_debian_repo_name is defined
@@ -36,7 +36,7 @@
 
 - name: CRI-O | Remove CRI-O kubic yum repo
   yum_repository:
-    name: "devel_kubic_libcontainers_stable_cri-o_{{ crio_version }}"
+    name: "devel_kubic_libcontainers_stable_cri-o_v{{ crio_version }}"
     state: absent
   when:
     - ansible_os_family == "RedHat"
