@@ -18,6 +18,15 @@
     - kubelet
     - kubeadm
 
+- name: Gather facts about the node
+  setup:
+    filter: ansible_memtotal_mb,ansible_processor_vcpus
+  tags:
+    - kubelet
+    - kubeadm
+  when:
+    - kube_enable_auto_reserved_resources
+
 - name: Write kubelet config file
   template:
     src: "kubelet-config.{{ kubeletConfig_api_version }}.yaml.j2"
