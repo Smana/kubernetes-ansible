@@ -5,8 +5,8 @@
   become: false
   run_once: true
   vars:
-    minimal_ansible_version: 2.16.4
-    maximal_ansible_version: 2.17.0
+    minimal_ansible_version: 2.17.3
+    maximal_ansible_version: 2.18.0
   tags: always
   tasks:
     - name: "Check {{ minimal_ansible_version }} <= Ansible version < {{ maximal_ansible_version }}"
