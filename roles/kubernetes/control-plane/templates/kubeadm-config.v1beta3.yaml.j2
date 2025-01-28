@@ -158,7 +158,7 @@ apiServer:
 {% if kube_apiserver_service_account_lookup %}
     service-account-lookup: "{{ kube_apiserver_service_account_lookup }}"
 {% endif %}
-{% if kube_oidc_auth | default(false) and kube_oidc_url is defined and kube_oidc_client_id is defined %}
+{% if kube_oidc_auth and kube_oidc_url is defined and kube_oidc_client_id is defined %}
     oidc-issuer-url: "{{ kube_oidc_url }}"
     oidc-client-id: "{{ kube_oidc_client_id }}"
 {%   if kube_oidc_ca_file is defined %}
@@ -176,6 +176,9 @@ apiServer:
 {%   if kube_oidc_groups_prefix is defined %}
     oidc-groups-prefix: "{{ kube_oidc_groups_prefix }}"
 {%   endif %}
+{% endif %}
+{% if kube_apiserver_use_authentication_config_file %}
+    authentication-config: {{ kube_config_dir }}/apiserver-authentication-config.yaml
 {% endif %}
 {% if kube_webhook_token_auth | default(false) %}
     authentication-token-webhook-config-file: {{ kube_config_dir }}/webhook-token-auth-config.yaml
@@ -268,6 +271,13 @@ apiServer:
     hostPath: {{ kube_config_dir }}/admission-controls
     mountPath: {{ kube_config_dir }}
     readOnly: false
+    pathType: DirectoryOrCreate
+{% endif %}
+{% if kube_apiserver_use_authentication_config_file %}
+  - name: structauth
+    hostPath: {{ kube_config_dir }}/apiserver-authentication-config.yaml
+    mountPath: {{ kube_config_dir }}/apiserver-authentication-config.yaml
+    readOnly: true
     pathType: DirectoryOrCreate
 {% endif %}
 {% if kube_apiserver_tracing %}

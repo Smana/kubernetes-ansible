@@ -83,6 +83,20 @@
     mode: "0640"
   when: kube_apiserver_tracing
 
+
+- name: Kubeadm | Configure Structured Authentication
+  copy:
+    content: "{{ authn_config | to_nice_yaml(indent=2, sort_keys=false) }}"
+    dest: "{{ kube_config_dir }}/apiserver-authentication-config.yaml"
+    mode: "0640"
+  vars:
+    authn_config:
+      apiVersion: apiserver.config.k8s.io/{{ 'v1alpha1' if kube_version is version('v1.30.0', '<') else 'v1beta1' if
+        kube_version is version('v1.32.0', '<') else 'v1' }}
+      kind: AuthenticationConfiguration
+      jwt: "{{ kube_apiserver_authentication_config_jwt_provider }}"
+  when: kube_apiserver_use_authentication_config_file
+
 # Nginx LB(default), If kubeadm_config_api_fqdn is defined, use other LB by kubeadm controlPlaneEndpoint.
 - name: Set kubeadm_config_api_fqdn define
   set_fact:
