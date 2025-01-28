@@ -55,7 +55,9 @@ cilium_enable_prometheus: false
 cilium_enable_portmap: false
 # Monitor aggregation level (none/low/medium/maximum)
 cilium_monitor_aggregation: medium
-# Kube Proxy Replacement mode (strict/partial)
+# Kube Proxy Replacement mode
+# cilium_version < 1.14.0: strict/partial/disabled
+# cilium_version >= 1.14.0: true/false
 cilium_kube_proxy_replacement: partial
 
 # If upgrading from Cilium < 1.5, you may want to override some of these options
@@ -119,6 +121,10 @@ cilium_wireguard_userspace_fallback: false
 # In case they select the Pod at egress, then the bandwidth enforcement will be disabled for those Pods.
 # Bandwidth Manager requires a v5.1.x or more recent Linux kernel.
 cilium_enable_bandwidth_manager: false
+
+# Enable BBR for the bandwidth manager
+# Requires cilium_enable_bandwidth_manager to be enabled
+cilium_enable_bbr: false
 
 # IP Masquerade Agent
 # https://docs.cilium.io/en/stable/concepts/networking/masquerading/
