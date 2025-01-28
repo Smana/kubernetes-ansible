@@ -29,8 +29,8 @@
   when:
     - dns_mode != 'none'
     - resolvconf_mode == 'host_resolvconf'
-    - systemd_resolved_enabled.rc != 0
-    - networkmanager_enabled.rc != 0
+    - ('systemd-resolved' not in active_dns_services )
+    - ('NetworkManager' not in active_dns_services )
   tags:
     - bootstrap-os
     - resolvconf
@@ -40,27 +40,26 @@
   when:
     - dns_mode != 'none'
     - resolvconf_mode == 'host_resolvconf'
-    - systemd_resolved_enabled.rc == 0
+    - ('systemd-resolved' in active_dns_services )
   tags:
     - bootstrap-os
     - resolvconf
 
-- name: Apply networkmanager unmanaged devices settings
-  import_tasks: 0062-networkmanager-unmanaged-devices.yml
-  when:
-    - networkmanager_enabled.rc == 0
+- name: NetworkManager | Apply settings
+  when: ('NetworkManager' in active_dns_services )
   tags:
     - bootstrap-os
+  block:
+    - name: Apply networkmanager unmanaged devices settings
+      import_tasks: 0062-networkmanager-unmanaged-devices.yml
 
-- name: Apply networkmanager DNS settings
-  import_tasks: 0063-networkmanager-dns.yml
-  when:
-    - dns_mode != 'none'
-    - resolvconf_mode == 'host_resolvconf'
-    - networkmanager_enabled.rc == 0
-  tags:
-    - bootstrap-os
-    - resolvconf
+    - name: Apply networkmanager DNS settings
+      import_tasks: 0063-networkmanager-dns.yml
+      when:
+        - dns_mode != 'none'
+        - resolvconf_mode == 'host_resolvconf'
+      tags:
+        - resolvconf
 
 - name: Install required system packages
   import_tasks: 0070-system-packages.yml
