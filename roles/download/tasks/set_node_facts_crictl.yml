@@ -1,0 +1,9 @@
+---
+- name: Download | Set node_images (crictl)
+  set_fact:
+    node_images: >-
+      {{
+        (node_images | default([])) +
+        [{'Digest': (item.repoDigests[0] | split('@'))[1], 'Repository': ((item.repoTags[0] | split(':'))[0] | regex_replace('^docker\.io/(library/)?', '')), 'Tag': (item.repoTags[0] | split(':'))[1]}]
+      }}
+  with_items: "{{ (node_images_raw.stdout | from_json).images }}"

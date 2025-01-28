@@ -15,11 +15,6 @@
       tags:
         - facts
 
-    - name: Download_container | Prepare container download
-      include_tasks: check_pull_required.yml
-      when:
-        - not download_always_pull
-
     - debug:  # noqa name[missing]
         msg: "Pull {{ image_reponame }} required is: {{ pull_required }}"
 
