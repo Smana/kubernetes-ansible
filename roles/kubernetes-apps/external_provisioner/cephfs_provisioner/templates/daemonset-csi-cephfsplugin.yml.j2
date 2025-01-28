@@ -1,0 +1,198 @@
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: ceph-csi-cephfs-nodeplugin
+  namespace: {{ cephfs_provisioner_namespace }}
+  labels:
+    app: ceph-csi-cephfs
+    component: nodeplugin
+spec:
+  selector:
+    matchLabels:
+      app: ceph-csi-cephfs
+      component: nodeplugin
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ceph-csi-cephfs
+        component: nodeplugin
+    spec:
+      serviceAccountName: cephfs-csi-nodeplugin
+      priorityClassName: system-node-critical
+      hostNetwork: true
+      hostPID: true
+      # to use e.g. Rook orchestrated cluster, and mons' FQDN is
+      # resolved through k8s service, set dns policy to cluster first
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: csi-cephfsplugin
+          image: {{ cephfs_provisioner_image_repo }}:{{ cephfs_provisioner_image_tag }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--nodeid=$(NODE_ID)"
+            - "--type=cephfs"
+            - "--nodeserver=true"
+            - "--pidlimit=-1"
+            - "--kernelmountoptions="
+            - "--fusemountoptions="
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--v=5"
+            - "--drivername=$(DRIVER_NAME)"
+            - "--enable-read-affinity=false"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DRIVER_NAME
+              value: cephfs.csi.ceph.com
+            - name: NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: "unix:///csi/csi.sock"
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: mountpoint-dir
+              mountPath: /var/lib/kubelet/pods
+              mountPropagation: Bidirectional
+            - name: plugin-dir
+              mountPath: /var/lib/kubelet/plugins
+              mountPropagation: "Bidirectional"
+            - name: host-sys
+              mountPath: /sys
+            - name: etc-selinux
+              mountPath: /etc/selinux
+              readOnly: true
+            - name: lib-modules
+              mountPath: /lib/modules
+              readOnly: true
+            - name: host-dev
+              mountPath: /dev
+            - name: host-mount
+              mountPath: /run/mount
+            - name: ceph-config
+              mountPath: /etc/ceph/
+            - name: ceph-csi-config
+              mountPath: /etc/ceph-csi-config/
+            - name: keys-tmp-dir
+              mountPath: /tmp/csi/keys
+            - name: ceph-csi-mountinfo
+              mountPath: /csi/mountinfo
+            - name: ceph-csi-encryption-kms-config
+              mountPath: /etc/ceph-csi-encryption-kms-config/
+          resources:
+            {}
+        - name: driver-registrar
+          # This is necessary only for systems with SELinux, where
+          # non-privileged sidecar containers cannot access unix domain socket
+          # created by privileged CSI driver container.
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+          image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.10.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--v=1"
+            - "--csi-address=/csi/csi.sock"
+            - "--kubelet-registration-path=/var/lib/kubelet/plugins/cephfs.csi.ceph.com/csi.sock"
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: registration-dir
+              mountPath: /registration
+          resources:
+            {}
+        - name: liveness-prometheus
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+          image: {{ cephfs_provisioner_image_repo }}:{{ cephfs_provisioner_image_tag }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--type=liveness"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--metricsport=8081"
+            - "--metricspath=/metrics"
+            - "--polltime=60s"
+            - "--timeout=3s"
+          env:
+            - name: CSI_ENDPOINT
+              value: unix:///csi/csi.sock
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 8081
+              name: metrics
+              protocol: TCP
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+          resources:
+            {}
+      volumes:
+        - name: socket-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/cephfs.csi.ceph.com/
+            type: DirectoryOrCreate
+        - name: registration-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins_registry/
+            type: Directory
+        - name: mountpoint-dir
+          hostPath:
+            path: /var/lib/kubelet/pods
+            type: DirectoryOrCreate
+        - name: plugin-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins
+            type: Directory
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: etc-selinux
+          hostPath:
+            path: /etc/selinux
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: host-mount
+          hostPath:
+            path: /run/mount
+        - name: ceph-config
+          configMap:
+            name: ceph-config
+        - name: ceph-csi-config
+          configMap:
+            name: ceph-csi-config
+        - name: keys-tmp-dir
+          emptyDir: {
+            medium: "Memory"
+          }
+        - name: ceph-csi-mountinfo
+          hostPath:
+            path: /var/lib/kubelet/plugins/cephfs.csi.ceph.com/mountinfo
+            type: DirectoryOrCreate
+        - name: ceph-csi-encryption-kms-config
+          configMap:
+            name: ceph-csi-encryption-kms-config

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "ceph-config"
+  namespace: {{ cephfs_provisioner_namespace }}
+data:
+  ceph.conf: |
+    {{ cephfs_provisioner_ceph_config | indent(width=4, first=False) }}
+
+  keyring: ""

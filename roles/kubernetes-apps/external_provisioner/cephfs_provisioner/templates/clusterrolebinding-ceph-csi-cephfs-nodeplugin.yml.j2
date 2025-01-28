@@ -1,14 +1,13 @@
 ---
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
 metadata:
-  name: cephfs-provisioner
-  namespace: {{ cephfs_provisioner_namespace }}
+  name: ceph-csi-cephfs-nodeplugin
 subjects:
   - kind: ServiceAccount
-    name: cephfs-provisioner
+    name: ceph-csi-cephfs-nodeplugin
     namespace: {{ cephfs_provisioner_namespace }}
 roleRef:
+  kind: ClusterRole
+  name: ceph-csi-cephfs-nodeplugin
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: cephfs-provisioner

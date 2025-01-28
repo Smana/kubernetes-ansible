@@ -123,7 +123,7 @@ Note:
   - [metallb](https://metallb.universe.tf/)  v0.13.9
   - [registry](https://github.com/distribution/distribution) v2.8.1
 - Storage Plugin
-  - [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.0-k8s1.11
+  - [cephfs-provisioner](https://github.com/kubernetes-incubator/external-storage) v3.11.0
   - [rbd-provisioner](https://github.com/kubernetes-incubator/external-storage) v2.1.1-k8s1.11
   - [aws-ebs-csi-plugin](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) v0.5.0
   - [azure-csi-plugin](https://github.com/kubernetes-sigs/azuredisk-csi-driver) v1.10.0

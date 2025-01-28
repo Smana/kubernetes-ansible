@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ceph-csi-cephfs-nodeplugin-http-metrics
+  namespace: {{ cephfs_provisioner_namespace }}
+  labels:
+    app: ceph-csi-cephfs
+    component: nodeplugin
+spec:
+  ports:
+    - name: http-metrics
+      port: 8080
+      targetPort: 8081
+  selector:
+    app: ceph-csi-cephfs
+    component: nodeplugin
+  type: "ClusterIP"

@@ -1,10 +1,24 @@
 ---
 cephfs_provisioner_namespace: "cephfs-provisioner"
-cephfs_provisioner_cluster: ceph
-cephfs_provisioner_monitors: ~
-cephfs_provisioner_admin_id: admin
-cephfs_provisioner_secret: secret
-cephfs_provisioner_storage_class: cephfs
+cephfs_provisioner_csidriver_name: cephfs.csi.ceph.com
+cephfs_provisioner_secret_name: csi-cephfs-secret
+cephfs_provisioner_cluster_id: ""
+cephfs_provisioner_admin_id: ""
+cephfs_provisioner_admin_key: ""
+cephfs_provisioner_storage_class: csi-cephfs-sc
+cephfs_provisioner_allow_volume_expansion: true
 cephfs_provisioner_reclaim_policy: Delete
-cephfs_provisioner_claim_root: /volumes
-cephfs_provisioner_deterministic_names: true
+cephfs_provisioner_mount_options: []
+cephfs_provisioner_ceph_config: |
+  [global]
+  auth_cluster_required = cephx
+  auth_service_required = cephx
+  auth_client_required = cephx
+
+  # ceph-fuse which uses libfuse2 by default has write buffer size of 2KiB
+  # adding 'fuse_big_writes = true' option by default to override this limit
+  # see https://github.com/ceph/ceph-csi/issues/1928
+  fuse_big_writes = true
+
+cephfs_provisioner_ceph_csi_config_json: |
+  []
