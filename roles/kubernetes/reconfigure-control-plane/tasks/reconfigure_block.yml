@@ -1,0 +1,41 @@
+- block:
+  - name: Write new manifest for kubernetes control plane components
+    raw: "kubeadm init phase control-plane all --config {{ kube_reconfig_path }}"
+
+  - name: Reconfigure local etcd
+    raw: "kubeadm init phase etcd local --config {{ kube_reconfig_path }}"
+
+  - name: Delete kube-apiserver pod
+    raw: "{{ bin_dir }}/kubectl delete pod -n kube-system kube-apiserver-{{ ansible_hostname }}"
+    ignore_errors: yes
+
+  - name: Wait for kube-apiserver pod to be running
+    raw: "{{ bin_dir }}/kubectl get pod -n kube-system kube-apiserver-{{ ansible_hostname }} -o jsonpath='{.status.phase}'"
+    register: check_apiserver
+    retries: 10
+    delay: 30
+    until: check_apiserver.stdout == 'Running'
+
+  - name: Delete kube-controller-manager pod
+    raw: "{{ bin_dir }}/kubectl delete pod -n kube-system kube-controller-manager-{{ ansible_hostname }}"
+    ignore_errors: yes
+
+  - name: Wait for kube-controller-manager pod to be running
+    raw: "{{ bin_dir }}/kubectl get pod -n kube-system kube-controller-manager-{{ ansible_hostname }} -o jsonpath='{.status.phase}'"
+    register: check_controller_manager
+    retries: 10
+    delay: 30
+    until: check_controller_manager.stdout == 'Running'
+
+  - name: Delete kube-scheduler pod
+    raw: "{{ bin_dir }}/kubectl delete pod -n kube-system kube-scheduler-{{ ansible_hostname }}"
+    ignore_errors: yes
+
+  - name: Wait for kube-scheduler pod to be running
+    raw: "{{ bin_dir }}/kubectl get pod -n kube-system kube-scheduler-{{ ansible_hostname }} -o jsonpath='{.status.phase}'"
+    register: check_scheduler
+    retries: 10
+    delay: 30
+    until: check_scheduler.stdout == 'Running'
+  delegate_to: "{{ cp_node }}"
+  when: kubeadm_already_run.stat.exists | default(false)

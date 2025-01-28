@@ -1,0 +1,25 @@
+---
+- name: Common tasks for every playbooks
+  import_playbook: boilerplate.yml
+
+- name: Gather facts
+  import_playbook: facts.yml
+
+- name: Tasks for reconfigure control plane
+  hosts: kube_control_plane
+  gather_facts: false
+  pre_tasks:
+    - name: Include vars from `kubespray-defaults` main
+      run_once: true
+      ansible.builtin.include_vars:
+        dir: "{{ playbook_dir }}/../roles/kubespray-defaults/defaults/main"
+    - name: Include vars from `kubespray-defaults` vars
+      run_once: true
+      ansible.builtin.include_vars:
+       dir: "{{ playbook_dir }}/../roles/kubespray-defaults/vars"
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  vars:
+    skip_downloads: true
+  roles:
+    - { role: kubernetes/control-plane, tags: ['facts'] }
+    - { role: kubernetes/reconfigure-control-plane }
