@@ -37,5 +37,6 @@ exclude_paths:
   - tests/files/custom_cni/cilium.yaml
   - venv
   - .github
+  - .cache
 mock_modules:
   - gluster.gluster.gluster_volume
