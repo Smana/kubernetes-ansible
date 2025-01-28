@@ -92,7 +92,7 @@ containerd_registry_auth: []
 # Configure containerd service
 containerd_limit_proc_num: "infinity"
 containerd_limit_core: "infinity"
-containerd_limit_open_file_num: "infinity"
+containerd_limit_open_file_num: 1048576
 containerd_limit_mem_lock: "infinity"
 
 # OS distributions that already support containerd

@@ -1,4 +1,10 @@
+{% if containerd_version is version('2.0.0', '>=') %}
+version = 3
+{% else %}
 version = 2
+{% endif %}
+
+
 root = "{{ containerd_storage_dir }}"
 state = "{{ containerd_state_dir }}"
 oom_score = {{ containerd_oom_score }}

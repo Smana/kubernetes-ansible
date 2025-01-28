@@ -102,7 +102,7 @@ Note:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.32.0
   - [etcd](https://github.com/etcd-io/etcd) v3.5.16
   - [docker](https://www.docker.com/) v26.1
-  - [containerd](https://containerd.io/) v1.7.24
+  - [containerd](https://containerd.io/) v2.0.2
   - [cri-o](http://cri-o.io/) v1.32.0 (experimental: see [CRI-O Note](docs/CRI/cri-o.md). Only on fedora, ubuntu and centos based OS)
 - Network Plugin
   - [cni-plugins](https://github.com/containernetworking/plugins) v1.4.0
