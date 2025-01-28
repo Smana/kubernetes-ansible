@@ -78,7 +78,7 @@ spec:
         command:
         - /cluster-proportional-autoscaler
         - --namespace=kube-system
-        - --default-params={"linear":{"preventSinglePointFailure":{{ dns_prevent_single_point_failure }},"coresPerReplica":{{ dns_cores_per_replica }},"nodesPerReplica":{{ dns_nodes_per_replica }},"min":{{ dns_min_replicas }}}}
+        - --default-params={"linear":{"preventSinglePointFailure":{{ dns_prevent_single_point_failure }},"coresPerReplica":{{ dns_cores_per_replica }},"nodesPerReplica":{{ dns_nodes_per_replica }},"min":{{ dns_min_replicas }},"includeUnschedulableNodes":{{ dns_include_unschedulable_nodes}}}}
         - --logtostderr=true
         - --v=2
         - --configmap=dns-autoscaler{{ coredns_ordinal_suffix }}
