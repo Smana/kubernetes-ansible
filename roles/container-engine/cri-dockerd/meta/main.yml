@@ -1,4 +1,4 @@
 ---
 dependencies:
-  - role: container-engine/docker
+  - { role: container-engine/docker, tags: docker-engine }
   - role: container-engine/crictl

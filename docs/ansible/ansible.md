@@ -85,6 +85,7 @@ The following tags are defined in playbooks:
 | dashboard                      | Installing and configuring the Kubernetes Dashboard   |
 | dns                            | Remove dns entries when resetting                     |
 | docker                         | Configuring docker engine runtime for hosts           |
+| docker-engine                  | Configuring docker engine runtime only for hosts      |
 | download                       | Fetching container images to a delegate host          |
 | etcd                           | Configuring etcd cluster                              |
 | etcd-secrets                   | Configuring etcd certs/keys                           |
