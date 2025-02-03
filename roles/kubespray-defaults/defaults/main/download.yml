@@ -74,13 +74,13 @@ image_info_command_on_localhost: "{{ lookup('vars', image_command_tool_on_localh
 image_arch: "{{ host_architecture | default('amd64') }}"
 
 # Versions
-crun_version: 1.17
-runc_version: v1.2.3
-kata_containers_version: 3.1.3
-youki_version: 0.4.1
-gvisor_version: 20240305
-containerd_version: 1.7.24
-cri_dockerd_version: 0.3.11
+crun_version: "{{ (crun_checksums['amd64'] | dict2items)[0].key }}"
+runc_version: "{{ (runc_checksums['amd64'] | dict2items)[0].key }}"
+kata_containers_version: "{{ (kata_containers_binary_checksums['amd64'] | dict2items)[0].key }}"
+youki_version: "{{ (youki_checksums['amd64'] | dict2items)[0].key }}"
+gvisor_version: "{{ (gvisor_runsc_binary_checksums['amd64'] | dict2items)[0].key }}"
+containerd_version: "{{ (containerd_archive_checksums['amd64'] | dict2items)[0].key }}"
+cri_dockerd_version: "{{ (cri_dockerd_archive_checksums['amd64'] | dict2items)[0].key }}"
 
 # this is relevant when container_manager == 'docker'
 docker_containerd_version: 1.6.32
@@ -100,7 +100,7 @@ github_image_repo: "ghcr.io"
 
 # TODO(mattymo): Move calico versions to roles/network_plugins/calico/defaults
 # after migration to container download
-calico_version: "v3.29.1"
+calico_version: "{{ (calicoctl_binary_checksums['amd64'] | dict2items)[0].key }}"
 calico_ctl_version: "{{ calico_version }}"
 calico_cni_version: "{{ calico_version }}"
 calico_policy_version: "{{ calico_version }}"
@@ -112,19 +112,19 @@ calico_apiserver_enabled: false
 flannel_version: "v0.22.0"
 flannel_cni_version: "v1.1.2"
 weave_version: 2.8.7
-cni_version: "v1.4.0"
+cni_version: "{{ (cni_binary_checksums['amd64'] | dict2items)[0].key }}"
 
 cilium_version: "v1.15.9"
-cilium_cli_version: "v0.16.0"
+cilium_cli_version: "{{ (ciliumcli_binary_checksums['amd64'] | dict2items)[0].key }}"
 cilium_enable_hubble: false
 
 kube_ovn_version: "v1.12.21"
 kube_ovn_dpdk_version: "19.11-{{ kube_ovn_version }}"
 kube_router_version: "v2.0.0"
 multus_version: "v4.1.0"
-helm_version: "v3.16.4"
-nerdctl_version: "1.7.7"
-skopeo_version: "v1.16.1"
+helm_version: "{{ (helm_archive_checksums['amd64'] | dict2items)[0].key }}"
+nerdctl_version: "{{ (nerdctl_archive_checksums['amd64'] | dict2items)[0].key }}"
+skopeo_version: "{{ (skopeo_binary_checksums['amd64'] | dict2items)[0].key }}"
 
 # Get kubernetes major version (i.e. 1.17.4 => 1.17)
 kube_major_version: "{{ kube_version | regex_replace('^v([0-9])+\\.([0-9]+)\\.[0-9]+', 'v\\1.\\2') }}"
@@ -160,7 +160,7 @@ scheduler_plugins_supported_versions:
   v1.29: 0
 scheduler_plugins_version: "{{ scheduler_plugins_supported_versions[kube_major_version] }}"
 
-yq_version: "v4.42.1"
+yq_version: "{{ (yq_checksums['amd64'] | dict2items)[0].key }}"
 
 github_url: https://github.com
 dl_k8s_io_url: https://dl.k8s.io

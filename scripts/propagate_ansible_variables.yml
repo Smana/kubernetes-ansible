@@ -20,3 +20,11 @@
       marker: '<!-- {mark} ANSIBLE MANAGED BLOCK -->'
       block: "\n{{ lookup('ansible.builtin.template', 'readme_versions.md.j2') }}\n\n"
       path: ../README.md
+  - name: Render Dockerfiles
+    template:
+      src: "{{ item }}.j2"
+      dest: "../{{ item }}"
+      mode: "0644"
+    loop:
+    - 'pipeline.Dockerfile'
+    - 'Dockerfile'

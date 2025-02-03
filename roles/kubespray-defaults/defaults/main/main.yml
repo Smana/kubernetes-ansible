@@ -18,10 +18,10 @@ kubelet_fail_swap_on: true
 kubelet_swap_behavior: LimitedSwap
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.32.0
+kube_version: "{{ (kubelet_checksums['amd64'] | dict2items)[0].key }}"
 
 ## The minimum version working
-kube_version_min_required: v1.30.0
+kube_version_min_required: "{{ (kubelet_checksums['amd64'] | dict2items)[-1].key }}"
 
 ## Kube Proxy mode One of ['iptables', 'ipvs']
 kube_proxy_mode: ipvs

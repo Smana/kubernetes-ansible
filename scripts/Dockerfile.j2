@@ -35,8 +35,8 @@ RUN --mount=type=bind,source=requirements.txt,target=requirements.txt \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN OS_ARCHITECTURE=$(dpkg --print-architecture) \
-    && curl -L "https://dl.k8s.io/release/v1.32.0/bin/linux/${OS_ARCHITECTURE}/kubectl" -o /usr/local/bin/kubectl \
-    && echo "$(curl -L "https://dl.k8s.io/release/v1.32.0/bin/linux/${OS_ARCHITECTURE}/kubectl.sha256")" /usr/local/bin/kubectl | sha256sum --check \
+    && curl -L "https://dl.k8s.io/release/{{ kube_version }}/bin/linux/${OS_ARCHITECTURE}/kubectl" -o /usr/local/bin/kubectl \
+    && echo "$(curl -L "https://dl.k8s.io/release/{{ kube_version }}/bin/linux/${OS_ARCHITECTURE}/kubectl.sha256")" /usr/local/bin/kubectl | sha256sum --check \
     && chmod a+x /usr/local/bin/kubectl
 
 COPY *.yml ./
