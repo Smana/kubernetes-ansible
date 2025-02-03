@@ -144,6 +144,11 @@ data:
   # Bandwidth Manager requires a v5.1.x or more recent Linux kernel.
 {% if cilium_enable_bandwidth_manager %}
   enable-bandwidth-manager: "true"
+  # Enable BBR for the bandwidth manager
+  # BBR for Pods requires a v5.18.x or more recent Linux kernel.
+{% if cilium_enable_bbr %}
+  enable-bbr: "true"
+{% endif %}
 {% endif %}
 
   # Host Firewall and Policy Audit Mode

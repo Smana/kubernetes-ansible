@@ -313,11 +313,20 @@ Bandwidth Manager requires a v5.1.x or more recent Linux kernel.
 
 For further information, make sure to check the official [Cilium documentation](https://docs.cilium.io/en/latest/network/kubernetes/bandwidth-manager/)
 
-To use this function, set the following parameters
+To use this feature, set the following parameters:
 
 ```yml
 cilium_enable_bandwidth_manager: true
 ```
+
+The base infrastructure around MQ/FQ setup provided by Cilium’s bandwidth manager also allows for use of TCP BBR congestion control for Pods. BBR achieves higher bandwidths and lower latencies for Internet traffic. you can enable it by setting the following parameters:
+
+```yaml
+cilium_enable_bandwidth_manager: true
+cilium_enable_bbr: true
+```
+
+> BBR for Pods requires a v5.18.x or more recent Linux kernel.
 
 ## Host Firewall
 
