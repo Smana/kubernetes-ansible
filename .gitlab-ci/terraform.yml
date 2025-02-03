@@ -164,7 +164,7 @@ tf-elastx_cleanup:
 
 tf-elastx_ubuntu20-calico:
   extends: .terraform_apply
-  stage: deploy-part1
+  stage: test
   when: on_success
   allow_failure: true
   variables:
