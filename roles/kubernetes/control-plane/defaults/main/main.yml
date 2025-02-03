@@ -140,6 +140,50 @@ kube_api_runtime_config: []
 kube_token_auth: false
 kube_oidc_auth: false
 
+## Structured authentication config
+## Structured AuthenticationConfiguration is a new feature in Kubernetes v1.29+ (GA in v1.32) that configures the API server's authentication modes with a structured configuration file.
+## Note: The `--authentication-config` and `--oidc-*` flags are mutually exclusive. The two features cannot be used at the same time.
+## Docs: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#using-authentication-configuration
+## Examples: https://kubernetes.io/blog/2024/04/25/structured-authentication-moves-to-beta/#how-to-use-structured-authentication-configuration
+## KEP: https://github.com/kubernetes/enhancements/tree/master/keps/sig-auth/3331-structured-authentication-configuration
+kube_apiserver_use_authentication_config_file: false
+kube_apiserver_authentication_jwt_provider: []
+# Example
+# - issuer:
+#     url: "https://issuer1.example.com"
+#     audiences:
+#       - audience1
+#       - audience2
+#     audienceMatchPolicy: MatchAny
+#   claimMappings:
+#     username:
+#       expression: "claims.username"
+#     groups:
+#       expression: "claims.groups"
+#     uid:
+#       expression: "claims.uid"
+#   userValidationRules:
+#     - expression: "!user.username.startsWith('system:')"
+#       message: "username cannot use reserved system: prefix"
+# - issuer:
+#     url: "https://issuer2.example.com"
+#     discoveryURL: "https://discovery.example.com/.well-known/openid-configuration"
+#     audiences:
+#       - audience3
+#       - audience4
+#     audienceMatchPolicy: MatchAny
+#   claimMappings:
+#     username:
+#       expression: "claims.username"
+#     groups:
+#       expression: "claims.groups"
+#     uid:
+#       expression: "claims.uid"
+#   userValidationRules:
+#     - expression: "!user.username.startsWith('kubespray:')"
+#       message: "username cannot use reserved kubespray: prefix"
+
+
 ## Variables for webhook token auth https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication
 kube_webhook_token_auth: false
 kube_webhook_token_auth_url_skip_tls_verify: false
@@ -162,9 +206,10 @@ kube_apiserver_admission_plugins_podnodeselector_default_node_selector: ""
 # kube_oidc_client_id: kubernetes
 ## Optional settings for OIDC
 # kube_oidc_username_claim: sub
-# kube_oidc_username_prefix: 'oidc:'
+# kube_oidc_username_prefix: "oidc:"
 # kube_oidc_groups_claim: groups
-# kube_oidc_groups_prefix: 'oidc:'
+# kube_oidc_groups_prefix: "oidc:"
+# kube_oidc_uid_claim: "sub"
 # Copy oidc CA file to the following path if needed
 # kube_oidc_ca_file: {{ kube_cert_dir }}/ca.pem
 # Optionally include a base64-encoded oidc CA cert
