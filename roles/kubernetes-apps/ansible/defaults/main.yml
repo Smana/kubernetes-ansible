@@ -10,6 +10,7 @@ dns_min_replicas: "{{ [2, groups['k8s_cluster'] | length] | min }}"
 dns_nodes_per_replica: 16
 dns_cores_per_replica: 256
 dns_prevent_single_point_failure: "{{ 'true' if dns_min_replicas | int > 1 else 'false' }}"
+dns_include_unschedulable_nodes: false
 enable_coredns_reverse_dns_lookups: true
 coredns_ordinal_suffix: ""
 # dns_extra_tolerations: [{effect: NoSchedule, operator: "Exists"}]
