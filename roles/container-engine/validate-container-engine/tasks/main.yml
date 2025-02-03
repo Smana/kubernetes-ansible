@@ -151,3 +151,4 @@
       import_role:
         name: container-engine/cri-o
         tasks_from: reset
+        handlers_from: reset
