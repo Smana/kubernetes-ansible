@@ -26,4 +26,4 @@
     owner: "{{ etcd_owner }}"
     group: "{{ etcd_owner }}"
     mode: "0700"
-  when: etcd_deployment_type == "kubeadm"
+  when: etcd_deployment_type == "kubeadm" and inventory_hostname in groups["etcd"]
