@@ -1,0 +1,193 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ceph-csi-cephfs-provisioner
+  namespace: {{ cephfs_provisioner_namespace }}
+  labels:
+    app: ceph-csi-cephfs
+    component: provisioner
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+  selector:
+    matchLabels:
+      app: ceph-csi-cephfs
+      component: provisioner
+  template:
+    metadata:
+      labels:
+        app: ceph-csi-cephfs
+        component: provisioner
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - ceph-csi-cephfs
+                  - key: component
+                    operator: In
+                    values:
+                      - provisioner
+              topologyKey: "kubernetes.io/hostname"
+      serviceAccountName: ceph-csi-cephfs-provisioner
+      hostNetwork: false
+      priorityClassName: system-cluster-critical
+      containers:
+        - name: csi-cephfsplugin
+          image: {{ cephfs_provisioner_image_repo }}:{{ cephfs_provisioner_image_tag }}
+          imagePullPolicy: "IfNotPresent"
+          args:
+            - "--nodeid=$(NODE_ID)"
+            - "--type=cephfs"
+            - "--controllerserver=true"
+            - "--pidlimit=-1"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--v=5"
+            - "--drivername=$(DRIVER_NAME)"
+            - "--setmetadata=true"
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DRIVER_NAME
+              value: {{ cephfs_provisioner_csidriver_name }}
+            - name: NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: CSI_ENDPOINT
+              value: "unix:///csi/csi-provisioner.sock"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: host-sys
+              mountPath: /sys
+            - name: lib-modules
+              mountPath: /lib/modules
+              readOnly: true
+            - name: host-dev
+              mountPath: /dev
+            - name: ceph-config
+              mountPath: /etc/ceph/
+            - name: ceph-csi-config
+              mountPath: /etc/ceph-csi-config/
+            - name: keys-tmp-dir
+              mountPath: /tmp/csi/keys
+          resources:
+            {}
+        - name: csi-provisioner
+          image: "registry.k8s.io/sig-storage/csi-provisioner:v4.0.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--v=1"
+            - "--timeout=60s"
+            - "--leader-election=true"
+            - "--retry-interval-start=500ms"
+            - "--extra-create-metadata=true"
+            - "--feature-gates=HonorPVReclaimPolicy=true"
+            - "--prevent-volume-mode-conversion=true"
+          env:
+            - name: ADDRESS
+              value: "unix:///csi/csi-provisioner.sock"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+          resources:
+            {}
+        - name: csi-snapshotter
+          image: registry.k8s.io/sig-storage/csi-snapshotter:v7.0.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--csi-address=$(ADDRESS)"
+            - "--v=1"
+            - "--timeout=60s"
+            - "--leader-election=true"
+            - "--extra-create-metadata=true"
+            - "--enable-volume-group-snapshots=false"
+          env:
+            - name: ADDRESS
+              value: "unix:///csi/csi-provisioner.sock"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+          resources:
+            {}
+        - name: csi-resizer
+          image: "registry.k8s.io/sig-storage/csi-resizer:v1.10.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--v=1"
+            - "--csi-address=$(ADDRESS)"
+            - "--timeout=60s"
+            - "--leader-election"
+            - "--retry-interval-start=500ms"
+            - "--handle-volume-inuse-error=false"
+            - "--feature-gates=RecoverVolumeExpansionFailure=true"
+          env:
+            - name: ADDRESS
+              value: "unix:///csi/csi-provisioner.sock"
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+          resources:
+            {}
+        - name: liveness-prometheus
+          image: {{ cephfs_provisioner_image_repo }}:{{ cephfs_provisioner_image_tag }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--type=liveness"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--metricsport=8081"
+            - "--metricspath=/metrics"
+            - "--polltime=60s"
+            - "--timeout=3s"
+          env:
+            - name: CSI_ENDPOINT
+              value: "unix:///csi/csi-provisioner.sock"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: 8081
+              name: metrics
+              protocol: TCP
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+          resources:
+            {}
+      volumes:
+        - name: socket-dir
+          emptyDir: {
+            medium: "Memory"
+          }
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: host-dev
+          hostPath:
+            path: /dev
+        - name: ceph-config
+          configMap:
+            name: "ceph-config"
+        - name: ceph-csi-config
+          configMap:
+            name: "ceph-csi-config"
+        - name: keys-tmp-dir
+          emptyDir: {
+            medium: "Memory"
+          }

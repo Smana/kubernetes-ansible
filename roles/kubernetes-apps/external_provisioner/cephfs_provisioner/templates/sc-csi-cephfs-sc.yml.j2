@@ -1,0 +1,25 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ cephfs_provisioner_storage_class }}
+  labels:
+    app: ceph-csi-cephfs
+provisioner: {{ cephfs_provisioner_csidriver_name }}
+reclaimPolicy: {{ cephfs_provisioner_reclaim_policy }}
+parameters:
+  clusterID: {{ cephfs_provisioner_cluster_id }}
+  fsName: {{ cephfs_provisioner_fs_name }}
+  pool: {{ cephfs_provisioner_pool }}
+  csi.storage.k8s.io/provisioner-secret-name: {{ cephfs_provisioner_secret_name }}
+  csi.storage.k8s.io/provisioner-secret-namespace: {{ cephfs_provisioner_namespace }}
+  csi.storage.k8s.io/controller-expand-secret-name: {{ cephfs_provisioner_secret_name }}
+  csi.storage.k8s.io/controller-expand-secret-namespace: {{ cephfs_provisioner_namespace }}
+  csi.storage.k8s.io/node-stage-secret-name: {{ cephfs_provisioner_secret_name }}
+  csi.storage.k8s.io/node-stage-secret-namespace: {{ cephfs_provisioner_namespace }}
+reclaimPolicy: {{ cephfs_provisioner_reclaim_policy }}
+allowVolumeExpansion: {{ cephfs_provisioner_allow_volume_expansion }}
+mountOptions:
+  {% for option in cephfs_provisioner_mount_options %}
+  - {{ option }}
+  {% endfor %}

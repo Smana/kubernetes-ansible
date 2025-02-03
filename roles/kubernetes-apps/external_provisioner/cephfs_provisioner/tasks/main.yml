@@ -41,14 +41,23 @@
   set_fact:
     cephfs_provisioner_templates:
       - { name: 00-namespace, file: 00-namespace.yml, type: ns }
-      - { name: secret-cephfs-provisioner, file: secret-cephfs-provisioner.yml, type: secret }
+      - { name: sa-cephfs-csi-cephfs-nodeplugin, file: sa-cephfs-csi-cephfs-nodeplugin.yml, type: sa }
       - { name: sa-cephfs-provisioner, file: sa-cephfs-provisioner.yml, type: sa }
-      - { name: clusterrole-cephfs-provisioner, file: clusterrole-cephfs-provisioner.yml, type: clusterrole }
-      - { name: clusterrolebinding-cephfs-provisioner, file: clusterrolebinding-cephfs-provisioner.yml, type: clusterrolebinding }
-      - { name: role-cephfs-provisioner, file: role-cephfs-provisioner.yml, type: role }
-      - { name: rolebinding-cephfs-provisioner, file: rolebinding-cephfs-provisioner.yml, type: rolebinding }
-      - { name: deploy-cephfs-provisioner, file: deploy-cephfs-provisioner.yml, type: deploy }
-      - { name: sc-cephfs-provisioner, file: sc-cephfs-provisioner.yml, type: sc }
+      - { name: secret-csi-cephfs-secret, file: secret-csi-cephfs-secret.yml, type: secret }
+      - { name: cm-ceph-config, file: cm-ceph-config.yml, type: cm }
+      - { name: cm-ceph-csi-config, file: cm-ceph-csi-config.yml, type: cm }
+      - { name: sc-csi-cephfs-sc, file: sc-csi-cephfs-sc.yml, type: storageclass }
+      - { name: clusterrole-ceph-csi-cephfs-nodeplugin, file: clusterrole-ceph-csi-cephfs-nodeplugin.yml, type: clusterrole }
+      - { name: clusterrole-ceph-csi-cephfs-provisioner, file: clusterrole-ceph-csi-cephfs-provisioner.yml, type: clusterrole }
+      - { name: clusterrolebinding-ceph-csi-cephfs-nodeplugin, file: clusterrolebinding-ceph-csi-cephfs-nodeplugin.yml, type: clusterrolebinding }
+      - { name: clusterrolebinding-ceph-csi-cephfs-provisioner, file: clusterrolebinding-ceph-csi-cephfs-provisioner.yml, type: clusterrolebinding }
+      - { name: role-ceph-csi-cephfs-provisioner, file: role-ceph-csi-cephfs-provisioner.yml, type: role }
+      - { name: rolebinding-ceph-csi-cephfs-provisioner, file: rolebinding-ceph-csi-cephfs-provisioner.yml, type: rolebinding }
+      - { name: svc-ceph-csi-cephfs-nodeplugin-http-metrics, file: svc-ceph-csi-cephfs-nodeplugin-http-metrics.yml, type: service }
+      - { name: svc-ceph-csi-cephfs-provisioner-http-metrics, file: svc-ceph-csi-cephfs-provisioner-http-metrics.yml, type: service}
+      - { name: daemonset-csi-cephfsplugin, file: daemonset-csi-cephfsplugin.yml, type: daemonset }
+      - { name: deploy-csi-cephfsplugin-provisioner, file: deploy-csi-cephfsplugin-provisioner.yml, type: deploy }
+      - { name: csidriver-cephfs, file: csidriver-cephfs.yml, type: CSIDriver }
 
 - name: CephFS Provisioner | Create manifests
   template:

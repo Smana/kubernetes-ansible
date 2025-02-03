@@ -1,0 +1,12 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: CSIDriver
+metadata:
+  name: {{ cephfs_provisioner_csidriver_name }}
+  labels:
+    app: ceph-csi-cephfs
+spec:
+  attachRequired: false
+  podInfoOnMount: false
+  fsGroupPolicy: File
+  seLinuxMount: true
