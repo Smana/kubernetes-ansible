@@ -260,6 +260,10 @@ default_kubelet_config_dir: "{{ kube_config_dir }}/dynamic_kubelet_dir"
 
 # Whether to run kubelet and container-engine daemons in a dedicated cgroup.
 # kube_reserved: false
+# If kube_enable_auto_reserved_resources is true,
+# the cpu and memory values are calculated based on the number of CPUs and memory size of the host.
+# The calculation formulas can be seen in https://github.com/kubernetes-sigs/kubespray/blob/master/docs/cgroups.md
+# kube_enable_auto_reserved_resources: false
 ## Uncomment to override default values
 ## The following two items need to be set when kube_reserved is true
 # kube_reserved_cgroups_for_service_slice: kube.slice

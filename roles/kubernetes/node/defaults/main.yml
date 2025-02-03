@@ -9,7 +9,7 @@ kubelet_bind_address: "{{ ip | default('0.0.0.0') }}"
 kube_resolv_conf: "/etc/resolv.conf"
 
 # Set to empty to avoid cgroup creation
-kubelet_enforce_node_allocatable: "\"\""
+kubelet_enforce_node_allocatable: '""'
 
 # Set runtime and kubelet cgroups when using systemd as cgroup driver (default)
 kube_service_cgroups: "{% if kube_reserved %}{{ kube_reserved_cgroups_for_service_slice }}{% else %}system.slice{% endif %}"
@@ -32,13 +32,14 @@ kube_node_addresses: >-
     {{ hostvars[host]['ip'] | default(hostvars[host]['fallback_ip']) }}{{ ' ' if not loop.last else '' }}
   {%- endfor -%}
 kubelet_secure_addresses: "localhost link-local {{ kube_pods_subnet }} {{ kube_node_addresses }}"
-
 # Reserve this space for kube resources
 # Whether to run kubelet and container-engine daemons in a dedicated cgroup. (Not required for resource reservations).
 kube_reserved: false
+kube_enable_auto_reserved_resources: false
+kube_reserved_cgroups_for_service_slice: kube.slice
 kube_reserved_cgroups: "/{{ kube_reserved_cgroups_for_service_slice }}"
-kube_memory_reserved: "256Mi"
-kube_cpu_reserved: "100m"
+kube_memory_reserved: "{{ kube_enable_auto_reserved_resources | ternary((ansible_memtotal_mb * 0.05 + 330) | int | string ~ 'Mi', '256Mi') }}"
+kube_cpu_reserved: "{{ kube_enable_auto_reserved_resources | ternary((ansible_processor_vcpus * 1000 * 0.01 + 80) | int | string ~ 'm', '100m') }}"
 kube_ephemeral_storage_reserved: "500Mi"
 kube_pid_reserved: "1000"
 
@@ -186,7 +187,6 @@ kube_proxy_ipvs_modules:
 conntrack_modules:
   - nf_conntrack
   - nf_conntrack_ipv4
-
 
 ## Enable distributed tracing for kubelet
 kubelet_tracing: false
