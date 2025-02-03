@@ -1,4 +1,4 @@
 ---
 gateway_api_enabled: false
-gateway_api_version: v1.1.0
+gateway_api_version: 1.1.0
 gateway_api_experimental_channel: false

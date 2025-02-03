@@ -1,8 +1,8 @@
 ---
 - name: Cri-o | include vars/v1.29.yml
   include_vars: v1.29.yml
-  when: crio_version is version("v1.29.0", operator=">=")
+  when: crio_version is version("1.29.0", operator=">=")
 
 - name: Cri-o | include vars/v1.31.yml
   include_vars: v1.31.yml
-  when: crio_version is version("v1.31.0", operator=">=")
+  when: crio_version is version("1.31.0", operator=">=")

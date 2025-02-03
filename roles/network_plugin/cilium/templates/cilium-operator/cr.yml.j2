@@ -88,22 +88,22 @@ rules:
   - ciliumlocalredirectpolicies
   - ciliumlocalredirectpolicies/status
   - ciliumlocalredirectpolicies/finalizers
-{% if cilium_version | regex_replace('v') is version('1.11', '>=') %}
+{% if cilium_version is version('1.11', '>=') %}
   - ciliumendpointslices
 {% endif %}
-{% if cilium_version | regex_replace('v') is version('1.12', '>=') %}
+{% if cilium_version is version('1.12', '>=') %}
   - ciliumbgploadbalancerippools
   - ciliumloadbalancerippools
   - ciliumloadbalancerippools/status
   - ciliumbgppeeringpolicies
   - ciliumenvoyconfigs
 {% endif %}
-{% if cilium_version | regex_replace('v') is version('1.15', '>=') %}
+{% if cilium_version is version('1.15', '>=') %}
   - ciliumbgppeerconfigs
   - ciliumbgpadvertisements
   - ciliumbgpnodeconfigs
 {% endif %}
-{% if cilium_version | regex_replace('v') is version('1.16', '>=') %}
+{% if cilium_version is version('1.16', '>=') %}
   - ciliumbgpclusterconfigs
   - ciliumbgpclusterconfigs/status
   - ciliumbgpnodeconfigoverrides
@@ -134,7 +134,7 @@ rules:
   - create
   - get
   - update
-{% if cilium_version | regex_replace('v') is version('1.12', '>=') %}
+{% if cilium_version is version('1.12', '>=') %}
 - apiGroups:
   - apiextensions.k8s.io
   resources:
@@ -156,14 +156,14 @@ rules:
   - ciliumlocalredirectpolicies.cilium.io
   - ciliumnetworkpolicies.cilium.io
   - ciliumnodes.cilium.io
-{% if cilium_version | regex_replace('v') is version('1.14', '>=') %}
+{% if cilium_version is version('1.14', '>=') %}
   - ciliumnodeconfigs.cilium.io
   - ciliumcidrgroups.cilium.io
   - ciliuml2announcementpolicies.cilium.io
   - ciliumpodippools.cilium.io
   - ciliumloadbalancerippools.cilium.io
 {% endif %}
-{% if cilium_version | regex_replace('v') is version('1.15', '>=') %}
+{% if cilium_version is version('1.15', '>=') %}
   - ciliumbgpclusterconfigs.cilium.io
   - ciliumbgppeerconfigs.cilium.io
   - ciliumbgpadvertisements.cilium.io

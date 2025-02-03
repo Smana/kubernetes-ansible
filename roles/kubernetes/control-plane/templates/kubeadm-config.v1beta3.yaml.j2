@@ -104,7 +104,7 @@ featureGates:
   {{ feature | replace("=", ": ") }}
 {%   endfor %}
 {% endif %}
-kubernetesVersion: {{ kube_version }}
+kubernetesVersion: v{{ kube_version }}
 {% if kubeadm_config_api_fqdn is defined %}
 controlPlaneEndpoint: {{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port | default(kube_apiserver_port) }}
 {% else %}

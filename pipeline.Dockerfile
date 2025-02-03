@@ -50,8 +50,8 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
     && pip install --no-compile --no-cache-dir -r tests/requirements.txt \
     && pip install --no-compile --no-cache-dir -r requirements.txt \
     && KUBE_VERSION=$(sed -n 's/^kube_version: //p' roles/kubespray-defaults/defaults/main/main.yml) \
-    && curl -L https://dl.k8s.io/release/$KUBE_VERSION/bin/linux/$(dpkg --print-architecture)/kubectl -o /usr/local/bin/kubectl \
-    && echo $(curl -L https://dl.k8s.io/release/$KUBE_VERSION/bin/linux/$(dpkg --print-architecture)/kubectl.sha256) /usr/local/bin/kubectl | sha256sum --check \
+    && curl -L https://dl.k8s.io/release/v$KUBE_VERSION/bin/linux/$(dpkg --print-architecture)/kubectl -o /usr/local/bin/kubectl \
+    && echo $(curl -L https://dl.k8s.io/release/v$KUBE_VERSION/bin/linux/$(dpkg --print-architecture)/kubectl.sha256) /usr/local/bin/kubectl | sha256sum --check \
     && chmod a+x /usr/local/bin/kubectl \
     # Install Vagrant
     && curl -LO https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}-1_$(dpkg --print-architecture).deb \
