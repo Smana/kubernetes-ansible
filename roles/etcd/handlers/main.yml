@@ -24,7 +24,7 @@
 
 - name: Wait for etcd up
   uri:
-    url: "https://{% if 'etcd' in group_names %}{{ etcd_address }}{% else %}127.0.0.1{% endif %}:2379/health"
+    url: "https://{% if is_etcd_master %}{{ etcd_address | ansible.utils.ipwrap }}{% else %}127.0.0.1{% endif %}:2379/health"
     validate_certs: false
     client_cert: "{{ etcd_cert_dir }}/member-{{ inventory_hostname }}.pem"
     client_key: "{{ etcd_cert_dir }}/member-{{ inventory_hostname }}-key.pem"
@@ -39,7 +39,7 @@
 
 - name: Wait for etcd-events up
   uri:
-    url: "https://{% if 'etcd' in group_names %}{{ etcd_address }}{% else %}127.0.0.1{% endif %}:2383/health"
+    url: "https://{% if is_etcd_master %}{{ etcd_address | ansible.utils.ipwrap }}{% else %}127.0.0.1{% endif %}:2383/health"
     validate_certs: false
     client_cert: "{{ etcd_cert_dir }}/member-{{ inventory_hostname }}.pem"
     client_key: "{{ etcd_cert_dir }}/member-{{ inventory_hostname }}-key.pem"

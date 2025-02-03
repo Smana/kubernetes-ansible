@@ -621,7 +621,7 @@ kube_apiserver_global_endpoint: |-
   {%- elif loadbalancer_apiserver_localhost and (loadbalancer_apiserver_port is not defined or loadbalancer_apiserver_port == kube_apiserver_port) -%}
       https://localhost:{{ kube_apiserver_port }}
   {%- else -%}
-      https://{{ first_kube_control_plane_address }}:{{ kube_apiserver_port }}
+      https://{{ first_kube_control_plane_address | ansible.utils.ipwrap }}:{{ kube_apiserver_port }}
   {%- endif %}
 kube_apiserver_endpoint: |-
   {% if loadbalancer_apiserver is defined -%}
@@ -629,9 +629,9 @@ kube_apiserver_endpoint: |-
   {%- elif ('kube_control_plane' not in group_names) and loadbalancer_apiserver_localhost -%}
       https://localhost:{{ loadbalancer_apiserver_port | default(kube_apiserver_port) }}
   {%- elif 'kube_control_plane' in group_names -%}
-      https://{{ kube_apiserver_bind_address | regex_replace('0\.0\.0\.0', '127.0.0.1') }}:{{ kube_apiserver_port }}
+      https://{{ kube_apiserver_bind_address | regex_replace('0\.0\.0\.0', '127.0.0.1') | ansible.utils.ipwrap }}:{{ kube_apiserver_port }}
   {%- else -%}
-      https://{{ first_kube_control_plane_address }}:{{ kube_apiserver_port }}
+      https://{{ first_kube_control_plane_address | ansible.utils.ipwrap }}:{{ kube_apiserver_port }}
   {%- endif %}
 kube_apiserver_client_cert: "{{ kube_cert_dir }}/ca.crt"
 kube_apiserver_client_key: "{{ kube_cert_dir }}/ca.key"
@@ -646,18 +646,18 @@ etcd_hosts: "{{ groups['etcd'] | default(groups['kube_control_plane']) }}"
 etcd_address: "{{ ip | default(fallback_ip) }}"
 etcd_access_address: "{{ access_ip | default(etcd_address) }}"
 etcd_events_access_address: "{{ access_ip | default(etcd_address) }}"
-etcd_peer_url: "https://{{ etcd_access_address }}:2380"
-etcd_client_url: "https://{{ etcd_access_address }}:2379"
-etcd_events_peer_url: "https://{{ etcd_events_access_address }}:2382"
-etcd_events_client_url: "https://{{ etcd_events_access_address }}:2383"
+etcd_peer_url: "https://{{ etcd_access_address | ansible.utils.ipwrap }}:2380"
+etcd_client_url: "https://{{ etcd_access_address | ansible.utils.ipwrap }}:2379"
+etcd_events_peer_url: "https://{{ etcd_events_access_address | ansible.utils.ipwrap }}:2382"
+etcd_events_client_url: "https://{{ etcd_events_access_address | ansible.utils.ipwrap }}:2383"
 etcd_access_addresses: |-
   {% for item in etcd_hosts -%}
-    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip'])) }}:2379{% if not loop.last %},{% endif %}
+    https://{{ hostvars[item]['etcd_access_address'] | default(hostvars[item]['ip'] | default(fallback_ips[item])) | ansible.utils.ipwrap }}:2379{% if not loop.last %},{% endif %}
   {%- endfor %}
 etcd_events_access_addresses_list: |-
   [
   {% for item in etcd_hosts -%}
-    'https://{{ hostvars[item]['etcd_events_access_address'] | default(hostvars[item]['ip'] | default(hostvars[item]['fallback_ip'])) }}:2383'{% if not loop.last %},{% endif %}
+    'https://{{ hostvars[item]['etcd_events_access_address'] | default(hostvars[item]['ip'] | default(fallback_ips[item])) | ansible.utils.ipwrap }}:2383'{% if not loop.last %},{% endif %}
   {%- endfor %}
   ]
 etcd_metrics_addresses: |-
@@ -673,11 +673,11 @@ etcd_member_name: |-
   {% endfor %}
 etcd_peer_addresses: |-
   {% for item in groups['etcd'] -%}
-    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}=https://{{ hostvars[item].etcd_access_address | default(hostvars[item].ip | default(hostvars[item]['fallback_ip'])) }}:2380{% if not loop.last %},{% endif %}
+    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}=https://{{ hostvars[item].etcd_access_address | default(hostvars[item].ip | default(fallback_ips[item])) | ansible.utils.ipwrap }}:2380{% if not loop.last %},{% endif %}
   {%- endfor %}
 etcd_events_peer_addresses: |-
   {% for item in groups['etcd'] -%}
-    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}-events=https://{{ hostvars[item].etcd_events_access_address | default(hostvars[item].ip | default(hostvars[item]['fallback_ip'])) }}:2382{% if not loop.last %},{% endif %}
+    {{ hostvars[item].etcd_member_name | default("etcd" + loop.index | string) }}-events=https://{{ hostvars[item].etcd_events_access_address | default(hostvars[item].ip | default(fallback_ips[item])) | ansible.utils.ipwrap }}:2382{% if not loop.last %},{% endif %}
   {%- endfor %}
 
 etcd_heartbeat_interval: "250"

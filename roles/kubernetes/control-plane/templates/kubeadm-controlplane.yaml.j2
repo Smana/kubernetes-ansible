@@ -9,7 +9,7 @@ discovery:
 {% if kubeadm_config_api_fqdn is defined %}
     apiServerEndpoint: {{ kubeadm_config_api_fqdn }}:{{ loadbalancer_apiserver.port | default(kube_apiserver_port) }}
 {% else %}
-    apiServerEndpoint: {{ kubeadm_discovery_address }}
+    apiServerEndpoint: "{{ kubeadm_discovery_address | regex_replace(':(\\d+)$', '') | ansible.utils.ipwrap }}:{{ kubeadm_discovery_address | regex_search(':(\\d+)$') | replace(':', '') }}"
 {% endif %}
     token: {{ kubeadm_token }}
     unsafeSkipCAVerification: true

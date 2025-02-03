@@ -43,8 +43,8 @@
 
 - name: Wait for k8s apiserver
   wait_for:
-    host: "{{ kubeadm_discovery_address.split(':')[0] }}"
-    port: "{{ kubeadm_discovery_address.split(':')[1] }}"
+    host: "{{ kubeadm_discovery_address | replace('\"', '') | regex_replace(':(\\d+)$', '') }}"
+    port: "{{ kubeadm_discovery_address | replace('\"', '') | regex_search(':(\\d+)$') | replace(':', '') }}"
     timeout: 180
 
 

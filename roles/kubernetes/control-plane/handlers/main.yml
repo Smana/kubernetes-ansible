@@ -80,7 +80,7 @@
   vars:
     endpoint: "{{ kube_scheduler_bind_address if kube_scheduler_bind_address != '0.0.0.0' else 'localhost' }}"
   uri:
-    url: https://{{ endpoint }}:10259/healthz
+    url: https://{{ endpoint | ansible.utils.ipwrap }}:10259/healthz
     validate_certs: false
   register: scheduler_result
   until: scheduler_result.status == 200
@@ -94,7 +94,7 @@
   vars:
     endpoint: "{{ kube_controller_manager_bind_address if kube_controller_manager_bind_address != '0.0.0.0' else 'localhost' }}"
   uri:
-    url: https://{{ endpoint }}:10257/healthz
+    url: https://{{ endpoint | ansible.utils.ipwrap }}:10257/healthz
     validate_certs: false
   register: controller_manager_result
   until: controller_manager_result.status == 200
