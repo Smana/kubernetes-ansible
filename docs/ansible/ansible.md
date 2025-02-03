@@ -7,6 +7,8 @@ Depending on your available python version you may be limited in choosing which 
 
 It is recommended to deploy the ansible version used by kubespray into a python virtual environment.
 
+Download kubespray git directory and run below commands at the parent directory of`kubespray`:
+
 ```ShellSession
 VENVDIR=kubespray-venv
 KUBESPRAYDIR=kubespray
