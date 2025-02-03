@@ -14,12 +14,39 @@
   set_fact:
     is_ostree: "{{ ostree.stat.exists }}"
 
-- name: Cri-o | get ostree version
-  shell: "set -o pipefail && rpm-ostree --version | awk -F\\' '/Version/{print $2}'"
-  args:
-    executable: /bin/bash
-  register: ostree_version
+- name: Cri-o | ostree | add yum repo
+  copy:
+    content: |
+      [cri-o]
+      name=CRI-O
+      baseurl=https://pkgs.k8s.io/addons:/cri-o:/stable:/{{ kube_major_version }}/rpm/
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://pkgs.k8s.io/addons:/cri-o:/stable:/{{ kube_major_version }}/rpm/repodata/repomd.xml.key
+    dest: /etc/yum.repos.d/cri-o.repo
   when: is_ostree
+
+- name: Cri-o | ostree | install via rpm-ostree
+  community.general.rpm_ostree_pkg:
+    name: cri-o
+    state: present
+  when: is_ostree
+  register: rpm_ostree_pkg
+
+- name: Cri-o | ostree | install via rpm-ostree
+  reboot:
+    reboot_timeout: 240
+  when:
+    - is_ostree
+    - rpm_ostree_pkg.changed
+
+- name: Cri-o | ostree | add link to installed crio binary
+  file:
+    src: '/usr/bin/crio'
+    dest: '{{ bin_dir }}/crio'
+    state: link
+  when:
+    - is_ostree
 
 - name: Cri-o | Download cri-o
   include_tasks: "../../../download/tasks/download_file.yml"
@@ -88,6 +115,7 @@
   with_items:
     - "{{ crio_bin_files }}"
   notify: Restart crio
+  when: not is_ostree
 
 - name: Cri-o | create directory for libexec
   file:
@@ -95,6 +123,7 @@
     state: directory
     owner: root
     mode: "0755"
+  when: not is_ostree
 
 - name: Cri-o | copy libexec
   copy:
@@ -105,6 +134,7 @@
   with_items:
     - "{{ crio_libexec_files }}"
   notify: Restart crio
+  when: not is_ostree
 
 - name: Cri-o | copy service file
   copy:
@@ -113,6 +143,7 @@
     mode: "0755"
     remote_src: true
   notify: Restart crio
+  when: not is_ostree
 
 - name: Cri-o | configure crio to use kube reserved cgroups
   ansible.builtin.copy:
@@ -134,6 +165,7 @@
     regexp: "/usr/local/bin/crio"
     replace: "{{ bin_dir }}/crio"
   notify: Restart crio
+  when: not is_ostree
 
 - name: Cri-o | copy default policy
   copy:
