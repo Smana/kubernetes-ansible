@@ -65,6 +65,8 @@
   * [Ingress Nginx](/docs/ingress/ingress_nginx.md)
   * [Kube-vip](/docs/ingress/kube-vip.md)
   * [Metallb](/docs/ingress/metallb.md)
+* Manage Your Inventory
+  * [Dedicated Node Groups](/docs/manage_your_inventory/dedicated_node_groups.md)
 * Operating Systems
   * [Amazonlinux](/docs/operating_systems/amazonlinux.md)
   * [Bootstrap-os](/docs/operating_systems/bootstrap-os.md)
