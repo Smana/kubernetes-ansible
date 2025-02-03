@@ -1,0 +1,7 @@
+---
+# In case of nerdctl or docker, the output is already in the expected format
+# {"Digest":"sha256:847423221ed040798e47df36450edce5581ed642cd087ccb210532764da38b23","Repository":"quay.io/coreos/etcd","Tag":"v3.5.12"}
+# {"Digest":"sha256:34fc87c4a60c0b3ba3b3608871f4494de8072c02808a4151953068f2d7c87743","Repository":"flannel/flannel","Tag":"latest"}
+- name: Download | Set node_images (nerdctl, docker)
+  set_fact:
+    node_images: "{{ node_images_raw.stdout_lines | map('from_json') | list }}"

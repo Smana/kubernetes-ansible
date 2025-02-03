@@ -1,0 +1,18 @@
+---
+node_images: []
+
+docker_image_pull_command: "{{ docker_bin_dir }}/docker pull"
+docker_image_info_command: "{{ docker_bin_dir }}/docker images --format='{\"Digest\":\"{{ '{{' }}.Digest{{ '}}' }}\",\"Repository\":\"{{ '{{' }}.Repository{{ '}}' }}\",\"Tag\":\"{{ '{{' }}.Tag{{ '}}' }}\"}'"
+nerdctl_image_info_command: "{{ bin_dir }}/nerdctl images --format='{\"Digest\":\"{{ '{{' }}.Digest{{ '}}' }}\",\"Repository\":\"{{ '{{' }}.Repository{{ '}}' }}\",\"Tag\":\"{{ '{{' }}.Tag{{ '}}' }}\"}'"
+# Using the ctr instead of nerdctl to workdaround the https://github.com/kubernetes-sigs/kubespray/issues/10670
+nerdctl_image_pull_command: "{{ bin_dir }}/ctr -n k8s.io images pull{% if containerd_registries_mirrors is defined %} --hosts-dir {{ containerd_cfg_dir }}/certs.d{%- endif -%}"
+crictl_image_info_command: "{{ bin_dir }}/crictl images --output json"
+crictl_image_pull_command: "{{ bin_dir }}/crictl pull"
+
+image_command_tool: "{%- if container_manager == 'containerd' -%}nerdctl{%- elif container_manager == 'crio' -%}crictl{%- else -%}{{ container_manager }}{%- endif -%}"
+image_command_tool_on_localhost: "{{ image_command_tool }}"
+
+image_pull_command: "{{ lookup('vars', image_command_tool + '_image_pull_command') }}"
+image_info_command: "{{ lookup('vars', image_command_tool + '_image_info_command') }}"
+image_pull_command_on_localhost: "{{ lookup('vars', image_command_tool_on_localhost + '_image_pull_command') }}"
+image_info_command_on_localhost: "{{ lookup('vars', image_command_tool_on_localhost + '_image_info_command') }}"
