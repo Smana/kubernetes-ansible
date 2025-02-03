@@ -103,22 +103,10 @@ packet_debian11-macvlan:
 packet_debian12-cilium:
   extends: .packet_pr
 
-packet_almalinux8-calico:
-  extends: .packet_pr
-
-packet_rockylinux8-calico:
-  extends: .packet_pr
-
 packet_rockylinux9-cilium:
   extends: .packet_pr
   variables:
     RESET_CHECK: "true"
-
-packet_amazon-linux-2-all-in-one:
-  extends: .packet_pr
-
-packet_opensuse-docker-cilium:
-  extends: .packet_pr
 
 packet_ubuntu20-cilium-sep:
   extends: .packet_pr

@@ -27,20 +27,6 @@ images:
     converted: false
     tag: "latest"
 
-  fedora-37:
-    filename: Fedora-Cloud-Base-37-1.7.x86_64.qcow2
-    url: https://download.fedoraproject.org/pub/fedora/linux/releases/37/Cloud/x86_64/images/Fedora-Cloud-Base-37-1.7.x86_64.qcow2
-    checksum: sha256:b5b9bec91eee65489a5745f6ee620573b23337cbb1eb4501ce200b157a01f3a0
-    converted: true
-    tag: "latest"
-
-  fedora-38:
-    filename: Fedora-Cloud-Base-38-1.6.x86_64.qcow2
-    url: https://download.fedoraproject.org/pub/fedora/linux/releases/38/Cloud/x86_64/images/Fedora-Cloud-Base-38-1.6.x86_64.qcow2
-    checksum: sha256:d334670401ff3d5b4129fcc662cf64f5a6e568228af59076cc449a4945318482
-    converted: true
-    tag: "latest"
-
   fedora-39:
     filename: Fedora-Cloud-Base-39-1.5.x86_64.qcow2
     url: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Cloud/x86_64/images/Fedora-Cloud-Base-39-1.5.x86_64.qcow2
@@ -62,20 +48,6 @@ images:
     converted: true
     tag: "latest"
 
-  centos-8:
-    filename: CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2
-    url: http://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2
-    checksum: sha256:7ec97062618dc0a7ebf211864abf63629da1f325578868579ee70c495bed3ba0
-    converted: true
-    tag: "latest"
-
-  almalinux-8:
-    filename: AlmaLinux-8-GenericCloud-latest.x86_64.qcow2
-    url: https://repo.almalinux.org/almalinux/8.9/cloud/x86_64/images/AlmaLinux-8-GenericCloud-8.9-20231128.x86_64.qcow2
-    checksum: sha256:a1686bc537bce699b512e3233666f5b8f69ed797ff1ce0af52c17fdc52942621
-    converted: true
-    tag: "latest"
-
   almalinux-9:
     filename: AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2
     url: https://repo.almalinux.org/almalinux/9.5/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2
@@ -83,24 +55,10 @@ images:
     converted: true
     tag: "latest"
 
-  rockylinux-8:
-    filename: Rocky-8-GenericCloud-8.6-20220515.x86_64.qcow2
-    url: https://download.rockylinux.org/pub/rocky/8.6/images/Rocky-8-GenericCloud-8.6-20220515.x86_64.qcow2
-    checksum: sha256:77e79f487c70f6bfa5655d8084e02cb8d31900a2c2a22b2334c3401b40a1231c
-    converted: true
-    tag: "latest"
-
   rockylinux-9:
     filename: Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2
     url: https://download.rockylinux.org/pub/rocky/9.5/images/x86_64/Rocky-9-GenericCloud-Base-9.5-20241118.0.x86_64.qcow2
     checksum: sha256:069493fdc807300a22176540e9171fcff2227a92b40a7985a0c1c9e21aeebf57
-    converted: true
-    tag: "latest"
-
-  debian-10:
-    filename: debian-10-openstack-amd64.qcow2
-    url: https://cdimage.debian.org/cdimage/openstack/current-10/debian-10-openstack-amd64.qcow2
-    checksum: sha512:296ad8345cb49e52464a0cb8bf4365eb0b9e4220c47ebdd73d134d51effc756d5554aee15027fffd038fef4ad5fa984c94208bce60572d58b2ab26f74bb2a5de
     converted: true
     tag: "latest"
 
@@ -115,20 +73,6 @@ images:
     filename: debian-12-generic-amd64-20230612-1409.qcow2
     url: https://cdimage.debian.org/cdimage/cloud/bookworm/20230612-1409/debian-12-generic-amd64-20230612-1409.qcow2
     checksum: sha512:61358292dbec302446a272d5011019091ca78e3fe8878b2d67d31b32e0661306c53a72f793f109394daf937a3db7b2db34422d504e07fdbb300a7bf87109fcf1
-    converted: true
-    tag: "latest"
-
-  oracle-7:
-    filename: oracle-linux-76.qcow2
-    url: https://storage.googleapis.com/born-images/oracle76/oracle-linux-76.qcow2
-    checksum: sha256:f396c03e907fa2a0c94d6807b9f62622f23ee3499df4456ae2a15da381fbdca5
-    converted: true
-    tag: "latest"
-
-  opensuse-leap-15:
-    filename: openSUSE-Leap-15.3.x86_64-1.0.1-NoCloud-Build2.63.qcow2
-    url: https://download.opensuse.org/repositories/Cloud:/Images:/Leap_15.3/images/openSUSE-Leap-15.3.x86_64-1.0.1-NoCloud-Build2.63.qcow2
-    checksum: sha256:289248945e2d058551c71c1bdcb31a361cefe7136c7fd88a09b524eedfaf5215
     converted: true
     tag: "latest"
 

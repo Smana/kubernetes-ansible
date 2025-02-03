@@ -1,8 +1,0 @@
----
-# Instance settings
-cloud_image: amazon-linux-2
-mode: all-in-one
-
-# Workaround for RHEL8: kernel version 4.18 is lower than Kubernetes system verification.
-kubeadm_ignore_preflight_errors:
-  - SystemVerification
