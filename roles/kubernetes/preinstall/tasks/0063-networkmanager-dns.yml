@@ -9,7 +9,7 @@
     backup: "{{ leave_etc_backup_files }}"
   when:
     - ('127.0.0.53' not in nameserverentries
-       or systemd_resolved_enabled.rc != 0)
+       or 'systemd-resolved' not in active_dns_services)
   notify: Preinstall | update resolvconf for networkmanager
 
 - name: Set default dns if remove_default_searchdomains is false

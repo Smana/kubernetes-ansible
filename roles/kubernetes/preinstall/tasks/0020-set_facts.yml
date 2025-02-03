@@ -40,21 +40,17 @@
     src: /etc/resolv.conf
   register: resolvconf_slurp
 
-- name: NetworkManager | Check if host has NetworkManager
-  # noqa command-instead-of-module - Should we use service_facts for this?
-  command: systemctl is-active --quiet NetworkManager.service
-  register: networkmanager_enabled
-  failed_when: false
-  changed_when: false
-  check_mode: false
+- name: Register which network services are active
+  systemd:
+    name: "{{ item }}.service"
+  loop:
+    - NetworkManager
+    - systemd-resolved
+  register: network_services
 
-- name: Check systemd-resolved
-  # noqa command-instead-of-module - Should we use service_facts for this?
-  command: systemctl is-active systemd-resolved
-  register: systemd_resolved_enabled
-  failed_when: false
-  changed_when: false
-  check_mode: false
+- name: Save list of active network service
+  set_fact:
+    active_dns_services: "{{ network_services.results | selectattr('status.ActiveState', '==', 'active') | map(attribute='item') }}"
 
 - name: Set default dns if remove_default_searchdomains is false
   set_fact:
