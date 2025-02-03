@@ -1,0 +1,8 @@
+---
+kube_config_dir: "/etc/kubernetes"
+kube_apiserver_port: "6443"
+kube_reconfig_dir: "{{ kube_config_dir }}/reconfigure"
+cm_name: "kubeadm-config"
+cm_namespace: "kube-system"
+first_master_node: "groups['kube_control_plane'][0]"
+cm_cluster_config: "{{ kube_reconfig_dir }}/cm-cluster-config.yaml"
