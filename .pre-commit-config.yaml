@@ -29,7 +29,7 @@ repos:
         files: "\\.sh$"
 
   - repo: https://github.com/ansible/ansible-lint
-    rev: v25.1.0
+    rev: v25.1.1
     hooks:
       - id: ansible-lint
         additional_dependencies:

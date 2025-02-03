@@ -3,15 +3,16 @@ pre-commit:
   stage: test
   tags:
   - ffci
-  image: 'ghcr.io/pre-commit-ci/runner-image@sha256:aaf2c7b38b22286f2d381c11673bec571c28f61dd086d11b43a1c9444a813cef'
+  image: 'ghcr.io/pre-commit-ci/runner-image@sha256:fe01a6ec51b298412990b88627c3973b1146c7304f930f469bafa29ba60bcde9'
   variables:
-    PRE_COMMIT_HOME: /pre-commit-cache
+    PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
   script:
   - pre-commit run --all-files --show-diff-on-failure
   cache:
-    key: pre-commit-all
+    key: pre-commit-2
     paths:
-    - /pre-commit-cache
+    - ${PRE_COMMIT_HOME}
+    when: 'always'
   needs: []
 
 vagrant-validate:
