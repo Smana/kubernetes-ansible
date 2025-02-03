@@ -20,4 +20,5 @@ kubeadm_patches: []
 # Patches are applied in the order they are specified.
 
 # List of errors to ignore during kubeadm preflight checks
-kubeadm_ignore_preflight_errors: []
+kubeadm_ignore_preflight_errors:
+- Port-10250
