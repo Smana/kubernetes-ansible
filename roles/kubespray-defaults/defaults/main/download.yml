@@ -118,7 +118,7 @@ cilium_version: "v1.15.9"
 cilium_cli_version: "v0.16.0"
 cilium_enable_hubble: false
 
-kube_ovn_version: "v1.12.21"
+kube_ovn_version: "v1.12.28"
 kube_ovn_dpdk_version: "19.11-{{ kube_ovn_version }}"
 kube_router_version: "v2.0.0"
 multus_version: "v4.1.0"

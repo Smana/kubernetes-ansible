@@ -109,7 +109,7 @@ Note:
   - [calico](https://github.com/projectcalico/calico) v3.29.1
   - [cilium](https://github.com/cilium/cilium) v1.15.9
   - [flannel](https://github.com/flannel-io/flannel) v0.22.0
-  - [kube-ovn](https://github.com/alauda/kube-ovn) v1.12.21
+  - [kube-ovn](https://github.com/alauda/kube-ovn) v1.12.28
   - [kube-router](https://github.com/cloudnativelabs/kube-router) v2.0.0
   - [multus](https://github.com/k8snetworkplumbingwg/multus-cni) v4.1.0
   - [weave](https://github.com/rajch/weave) v2.8.7
