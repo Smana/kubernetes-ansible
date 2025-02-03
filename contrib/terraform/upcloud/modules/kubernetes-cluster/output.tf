@@ -1,22 +1,13 @@
-
 output "master_ip" {
-  value = {
-    for instance in upcloud_server.master :
-    instance.hostname => {
-      "public_ip" : instance.network_interface[0].ip_address
-      "private_ip" : instance.network_interface[1].ip_address
-    }
-  }
+  value = local.master_ip
 }
 
 output "worker_ip" {
-  value = {
-    for instance in upcloud_server.worker :
-    instance.hostname => {
-      "public_ip" : instance.network_interface[0].ip_address
-      "private_ip" : instance.network_interface[1].ip_address
-    }
-  }
+  value = local.worker_ip
+}
+
+output "bastion_ip" {
+  value = local.bastion_ip
 }
 
 output "loadbalancer_domain" {
