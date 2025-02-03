@@ -3,13 +3,14 @@
   include_tasks: openstack-credential-check.yml
   tags: external-openstack
 
-- name: External OpenStack Cloud Controller | Get base64 cacert
-  slurp:
+- name: External OpenStack Cloud Controller | Write cacert file
+  copy:
     src: "{{ external_openstack_cacert }}"
-  register: external_openstack_cacert_b64
+    dest: "{{ kube_config_dir }}/external-openstack-cacert.pem"
+    group: "{{ kube_cert_group }}"
+    mode: "0640"
   when:
     - inventory_hostname == groups['kube_control_plane'][0]
-    - external_openstack_cacert is defined
     - external_openstack_cacert | length > 0
   tags: external-openstack
 

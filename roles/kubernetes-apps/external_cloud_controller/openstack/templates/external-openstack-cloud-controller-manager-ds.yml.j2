@@ -66,10 +66,11 @@ spec:
               name: cloud-config-volume
               readOnly: true
               subPath: cloud.conf
-            - mountPath: {{ kube_config_dir }}/external-openstack-cacert.pem
-              name: cloud-config-volume
+{% if external_openstack_cacert != "" %}
+            - name: external-openstack-cacert
+              mountPath: {{ kube_config_dir }}/external-openstack-cacert.pem
               readOnly: true
-              subPath: ca.cert
+{% endif %}
 {% if kubelet_flexvolumes_plugins_dir is defined %}
             - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec
               name: flexvolume-dir
@@ -110,3 +111,9 @@ spec:
       - name: cloud-config-volume
         secret:
           secretName: external-openstack-cloud-config
+{% if external_openstack_cacert != "" %}
+      - name: external-openstack-cacert
+        hostPath:
+          path: {{ kube_config_dir }}/external-openstack-cacert.pem
+          type: FileOrCreate
+{% endif %}
