@@ -22,7 +22,7 @@
   listen: Control plane | Restart apiserver
 
 - name: Control plane | Remove apiserver container containerd/crio
-  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name kube-apiserver* -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
+  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name 'kube-apiserver*' -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
   args:
     executable: /bin/bash
   register: remove_apiserver_container
@@ -44,7 +44,7 @@
   listen: Control plane | Restart kube-scheduler
 
 - name: Control plane | Remove scheduler container containerd/crio
-  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name kube-scheduler* -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
+  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name 'kube-scheduler*' -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
   args:
     executable: /bin/bash
   register: remove_scheduler_container
@@ -66,7 +66,7 @@
   listen: Control plane | Restart kube-controller-manager
 
 - name: Control plane | Remove controller manager container containerd/crio
-  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name kube-controller-manager* -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
+  shell: "set -o pipefail && {{ bin_dir }}/crictl pods --name 'kube-controller-manager*' -q | xargs -I% --no-run-if-empty bash -c '{{ bin_dir }}/crictl stopp % && {{ bin_dir }}/crictl rmp %'"
   args:
     executable: /bin/bash
   register: remove_cm_container
