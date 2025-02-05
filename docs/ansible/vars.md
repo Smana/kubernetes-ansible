@@ -258,6 +258,13 @@ node_labels:
   label2_name: label2_value
 ```
 
+  Example of `node_labels` definition in `inventory.ini` format:
+
+```toml
+[sample_inventory_group:vars]
+node_labels={"label1_name":"label1_value", "label2_name":"label2_value"}
+```
+
 * *node_taints* - Taints applied to nodes via `kubectl taint node`.
   For example, taints can be set in the inventory as variables or more widely in group_vars.
   *node_taints* has to be defined as a list of strings in format `key=value:effect`, e.g.:

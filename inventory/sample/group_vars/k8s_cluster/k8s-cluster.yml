@@ -306,8 +306,9 @@ persistent_volumes_enabled: false
 ## Important: if you use Ubuntu then you should set in all.yml 'docker_storage_options: -s overlay2'
 ## Array with nvida_gpu_nodes, leave empty or comment if you don't want to install drivers.
 ## Labels and taints won't be set to nodes if they are not in the array.
-# nvidia_gpu_nodes:
-#   - kube-gpu-001
+## Dynamic render gpu node list via ansible inventory group.
+# nvidia_gpu_nodes: "{{ groups['nvidia_gpu_nodes'] | list }}"
+
 # nvidia_driver_version: "384.111"
 ## flavor can be tesla or gtx
 # nvidia_gpu_flavor: gtx
